@@ -26,6 +26,8 @@ class SignupAPI(APIView):
             first_name = serializer.data['first_name']
             last_name = serializer.data['last_name']
             phone_number = serializer.data['phone_number']
+            address = serializer.data['address']
+            postal_code = serializer.data['postal_code']
             try:
                 new_user = user.objects.get(username=username)
                 content = {'detail':
@@ -35,12 +37,15 @@ class SignupAPI(APIView):
             except:
 
                 new_user = user.objects.create_user(username=username , email=email, password=password,
-                                             first_name=first_name, last_name=last_name)
+                                             first_name=first_name, last_name=last_name  )
 
                 new_user.phone_number = phone_number
+                new_user.address = address
+                new_user.postal_code = postal_code
                 new_user.save()
                 content = {'username': username, 'email': email, 'first_name': first_name,
-                           'last_name': last_name, 'phone_number': phone_number}
+                           'last_name': last_name, 'phone_number': phone_number ,
+                           'address' : address ,'postal_code' : postal_code }
 
                 return Response(content, status=status.HTTP_201_CREATED)
 
