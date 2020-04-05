@@ -13,10 +13,11 @@ class SignupSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_blank=True)
     last_name = serializers.CharField(allow_blank=True)
     phone_number = serializers.CharField(max_length=15 , allow_blank=True)
-
+    address = serializers.CharField(min_length = 15 , max_length=200, allow_blank=True)
+    postal_code = serializers.CharField(min_length=9, allow_blank=True)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = user
-        fields = ('id','username', 'email', 'first_name', 'last_name', 'password','phone_number','img')
+        fields = ('id','username', 'email', 'first_name', 'last_name', 'password','phone_number', 'address' , 'postal_code', 'img')
 
