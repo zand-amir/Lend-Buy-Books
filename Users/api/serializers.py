@@ -12,7 +12,7 @@ class SignupSerializer(serializers.Serializer):
     email = serializers.EmailField(allow_blank=True)
     first_name = serializers.CharField(allow_blank=True)
     last_name = serializers.CharField(allow_blank=True)
-    phone_number=serializers.CharField(max_length=15,allow_blank=True)
+    phone_number = serializers.CharField(max_length=15 , allow_blank=True)
 
 
 class UserSerializer(serializers.ModelSerializer):
