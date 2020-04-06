@@ -17,7 +17,7 @@ class SignupAPI(APIView):
     permission_classes = (AllowAny,)
     serializer_class = SignupSerializer
 
-    def post(self, request, format=None):
+    def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             username = serializer.data['username']
@@ -42,10 +42,10 @@ class SignupAPI(APIView):
                 new_user.phone_number = phone_number
                 new_user.address = address
                 new_user.postal_code = postal_code
+                if ('img' in request.data):
+                    new_user.avatar = request.data['img']
                 new_user.save()
-                content = {'username': username, 'email': email, 'first_name': first_name,
-                           'last_name': last_name, 'phone_number': phone_number ,
-                           'address' : address ,'postal_code' : postal_code }
+                content = {'detail': 'new user successfully created ! ' }
 
                 return Response(content, status=status.HTTP_201_CREATED)
 
