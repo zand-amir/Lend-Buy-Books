@@ -17,7 +17,7 @@ from rest_framework_simplejwt.views import (
 
 
 urlpatterns = [
-    url('sign-up/', SignupAPI.as_view(), name='register'),
-    url('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    url('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    url(r'^sign-up/$', SignupAPI.as_view(), name='register'),
+    url(r'^token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    url(r'^token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
