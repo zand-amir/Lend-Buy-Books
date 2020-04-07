@@ -36,8 +36,8 @@ class SignupAPI(APIView):
 
             except:
 
-                new_user = user.objects.create_user(username=username , email=email, password=password,
-                                             first_name=first_name, last_name=last_name  )
+                new_user = user.objects.create_user(username=username, email=email, password=password,
+                                                    first_name=first_name, last_name=last_name)
 
                 new_user.phone_number = phone_number
                 new_user.address = address
@@ -45,9 +45,9 @@ class SignupAPI(APIView):
                 if ('img' in request.data):
                     new_user.avatar = request.data['img']
                 new_user.save()
-                content = {'detail': 'new user successfully created ! ' }
+                content = {'detail': 'new user successfully created ! '}
 
                 return Response(content, status=status.HTTP_201_CREATED)
 
         else:
-            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
