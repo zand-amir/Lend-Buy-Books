@@ -30,10 +30,10 @@ class Books(models.Model):
 
 
     def __unicode__(self):
-        return self.title
+        return self.Title
 
 
 
     def __str__(self):
-        return self.title
+        return self.Title
 
