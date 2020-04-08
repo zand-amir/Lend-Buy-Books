@@ -22,7 +22,7 @@ class Books(models.Model):
         ("اجتماعی", "اجتماعی"),
 
     )
-    Owner = models.ManyToManyField(user)
+    Owner = models.ForeignKey(user , related_name='posts',on_delete=models.CASCADE)
     Title = models.CharField(max_length=100, blank=False, default='بدون عنوان')
     Description = models.TextField(default='بدون توضیحات', blank=False)
     categories = models.CharField(max_length=100, blank=False, null=False, choices=CATEGORY, default = "بدون دسته بندی")
