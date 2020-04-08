@@ -22,6 +22,7 @@ class Books(models.Model):
         ("اجتماعی", "اجتماعی"),
 
 
+
     )
     Owner = models.ForeignKey(user , related_name='books',on_delete=models.CASCADE)
     Title = models.CharField(max_length=100, blank=False, default='بدون عنوان')
