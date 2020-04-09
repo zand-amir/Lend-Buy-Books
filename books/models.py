@@ -30,6 +30,7 @@ class Books(models.Model):
     Categories = models.CharField(max_length=100, blank=False, null=False, choices=CATEGORY, default = "بدون دسته بندی")
     Publish_date = models.CharField(max_length=100 , blank=False , default='تاریخ ذکر نشده است')
     Author = models.CharField(max_length=100 , blank= False , default='بدون نویسنده')
+    Price = models.CharField(max_length=100 , blank= False , default='بدون قیمت')
     ISBN = models.CharField(max_length=100, blank=False, default='بدون شابک')
     Publisher = models.CharField(max_length=100 , blank= False , default= 'بدون ناشر')
     BookIMG = models.ImageField(upload_to='Image/%Y/%m/%d/', blank=True)
@@ -52,5 +53,8 @@ class Proposal_Book(models.Model):
 
     Owner = models.ManyToManyField(user , related_name='have_book')
     Proposed_book = models.ManyToManyField(Books , related_name='proposedBook')
+    Offered_price = models.CharField(max_length=100 , blank= False , default='بدون قیمت')
+    Descriptions = models.CharField(max_length=100 , blank= False , default='بدون توضیحات')
+
 
 
