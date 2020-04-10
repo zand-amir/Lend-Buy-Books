@@ -22,7 +22,7 @@ class CreateBookSerializer(serializers.ModelSerializer):
 
 
         ]
-        extra_kwargs = {'BookIMG2': {'required': False} ,
+        extra_kwargs = {'BookIMG2': {'required': False},
                         'PDF_Book':{'required': False},
                         'Audio_Book' : {'required': False}
                         }
