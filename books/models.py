@@ -2,7 +2,6 @@ from django.db import models
 
 from Users.models import user
 
-
 # Create your models here.
 
 class Books(models.Model):
@@ -24,7 +23,7 @@ class Books(models.Model):
 
 
     )
-    # Owner = models.ForeignKey(user , related_name='books',on_delete=models.CASCADE)
+    #Owner = models.ForeignKey(user , related_name='books',on_delete=models.CASCADE)
     Title = models.CharField(max_length=100, blank=False, default='بدون عنوان')
     Description = models.TextField(default='بدون توضیحات', blank=False)
     Categories = models.CharField(max_length=100, blank=False, null=False, choices=CATEGORY, default = "بدون دسته بندی")
@@ -48,7 +47,9 @@ class Books(models.Model):
     def __str__(self):
         return self.Title
 
-class Proposal_Book(models.Model):
+
+
+class Proposed_Book(models.Model):
 
 
     Owner = models.ManyToManyField(user , related_name='have_book')
