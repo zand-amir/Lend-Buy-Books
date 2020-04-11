@@ -9,6 +9,9 @@ from rest_framework.permissions import (
 
 from rest_framework.generics import CreateAPIView
 
+
+from books.api.serializers import FindOBJID
+
 # from rest_framework import
 
 from rest_framework.parsers import (
@@ -16,14 +19,19 @@ from rest_framework.parsers import (
     FormParser
 )
 
-from books.api.serializers import CreateBookSerializer
+from books.api.serializers import (
+    CreateBookSerializer,
+    Proposed_BookSerializer
+)
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .models import Books
-
+from .models import (
+    Books ,
+    Proposed_Book
+)
 
 # Create your views here.
 
@@ -43,3 +51,25 @@ class CreateBookAPIView(CreateAPIView):
     #     return JsonResponse(serializer.errors, status=400)
     #
     #
+
+
+class BookProposedAPI(APIView):
+    permission_classes=(AllowAny,)
+    serializer_class = FindOBJID
+    serializer_class2 = Proposed_BookSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+
+        book = Proposed_Book.objects.get(id=serializer.data['Object_ID'])
+        serializer2 = self.serializer_class2(book)
+        Data = serializer2.data
+        Owner = book.Owner.username
+        for b in Data['Proposed_book']:
+            __book = Books.objects.get(id=b)
+
+            Data['Book_title'].append({'id': b , 'title': __book.title})
+
+        return Response(b, status=status.HTTP_200_OK)
+
+
