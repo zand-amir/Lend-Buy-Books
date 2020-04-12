@@ -7,6 +7,7 @@ from rest_framework.permissions import (
 
 )
 
+
 from rest_framework.generics import CreateAPIView
 
 
@@ -65,6 +66,11 @@ class BookProposedAPI(APIView):
         serializer2 = self.serializer_class2(book)
         Data = serializer2.data
         Owner = book.Owner.username
+        Data['Offered_price'] = serializer2.data['Offered_price']
+        Data['Descriptions'] = serializer2.data['Descriptions']
+        Data['Owner'] = Owner
+
+        Data['Book_title'] = []
         for b in Data['Proposed_book']:
             __book = Books.objects.get(id=b)
 
