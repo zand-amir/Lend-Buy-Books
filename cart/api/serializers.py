@@ -2,16 +2,15 @@
 
 from rest_framework import serializers
 
-from cart.models  import ( Cart,
-                           Order
-                           )
+from cart.models  import Cart
+
 
 class CartSerializer(serializers.HyperlinkedModelSerializer):
+    created_by = serializers.CurrentUserDefault()
+
     class Meta:
         model = Cart
-        fields = ( 'url', 'items',)
-
-class OrderSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Order
-        fields = ( 'url', 'items','cart')
+        fields = [
+            'created_by',
+            'order_items',
+        ]
