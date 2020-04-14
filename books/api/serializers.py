@@ -35,6 +35,11 @@ class CreateBookSerializer(serializers.ModelSerializer):
                         }
 
 
+class ProposeBookCreationSerializer(serializers.Serializer):
+    Offered_price = serializers.CharField(allow_blank=False, max_length=10)
+    Descriptions = serializers.CharField(allow_blank=False, max_length=100)
+    books = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
+
 
 class Proposed_BookSerializer(serializers.ModelSerializer):
 
