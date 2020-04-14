@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/User/', include('Users.urls')),
     url(r'api/Books/', include("books.urls")),
+    path('comments/',include("comment.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
