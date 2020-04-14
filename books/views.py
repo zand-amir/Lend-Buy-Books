@@ -58,7 +58,7 @@ class CreateBookAPIView(CreateAPIView):
     #
 
 
-class TravelLougeCreationAPI(APIView):
+class Proposed_bookCreationAPI(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ProposeBookCreationSerializer
 
