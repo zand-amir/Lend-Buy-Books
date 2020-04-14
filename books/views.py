@@ -107,28 +107,31 @@ class Proposed_bookCreationAPI(APIView):
 
                             status=status.HTTP_400_BAD_REQUEST)
 
-class BookProposedAPI(APIView):
-    permission_classes=(AllowAny,)
-    serializer_class = FindOBJID
-    serializer_class2 = Proposed_BookSerializer
 
-    def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
 
-        book = Proposed_Book.objects.get(id=serializer.data['Object_ID'])
-        serializer2 = self.serializer_class2(book)
-        Data = serializer2.data
-        Owner = book.Owner.username
-        Data['Offered_price'] = serializer2.data['Offered_price']
-        Data['Descriptions'] = serializer2.data['Descriptions']
-        Data['Owner'] = Owner
-
-        Data['Book_title'] = []
-        for b in Data['Proposed_book']:
-            __book = Books.objects.get(id=b)
-
-            Data['Book_title'].append({'id': b , 'title': __book.title})
-
-        return Response(b, status=status.HTTP_200_OK)
+#
+# class BookProposedAPI(APIView):
+#     permission_classes=(AllowAny,)
+#     serializer_class = FindOBJID
+#     serializer_class2 = Proposed_BookSerializer
+#
+#     def post(self, request, format=None):
+#         serializer = self.serializer_class(data=request.data)
+#
+#         book = Proposed_Book.objects.get(id=serializer.data['Object_ID'])
+#         serializer2 = self.serializer_class2(book)
+#         Data = serializer2.data
+#         Owner = book.Owner.username
+#         Data['Offered_price'] = serializer2.data['Offered_price']
+#         Data['Descriptions'] = serializer2.data['Descriptions']
+#         Data['Owner'] = Owner
+#
+#         Data['Book_title'] = []
+#         for b in Data['Proposed_book']:
+#             __book = Books.objects.get(id=b)
+#
+#             Data['Book_title'].append({'id': b , 'title': __book.title})
+#
+#         return Response(b, status=status.HTTP_200_OK)
 
 
