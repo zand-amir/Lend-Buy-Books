@@ -52,10 +52,12 @@ class Books(models.Model):
 class Proposed_Book(models.Model):
 
 
-    Owner = models.ManyToManyField(user , related_name='have_book')
-    Proposed_book = models.ManyToManyField(Books , related_name='proposedBook')
+    Owner = models.ForeignKey(user ,on_delete = models.CASCADE,null=True, related_name='have_book')
+    Proposed_book = models.ForeignKey(Books ,on_delete = models.CASCADE,null=True, related_name='proposedBook')
     Offered_price = models.CharField(max_length=100 , blank= False , default='بدون قیمت')
     Descriptions = models.CharField(max_length=100 , blank= False , default='بدون توضیحات')
 
+    def __str__(self):
+        return '"' + str(self.Proposed_book) + '"' + ' Offered By ' + '"' + str(self.Owner) + '"'
 
 
