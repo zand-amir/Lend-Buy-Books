@@ -7,16 +7,11 @@ from books.models import Proposed_Book
 
 
 class Cart(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True , null=True, blank=True )
-    status = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey(user, related_name="carts" , on_delete=models.CASCADE)
-    items = models.ManyToManyField(Proposed_Book)
+    #date_created = models.DateTimeField(auto_now_add=True , null=True, blank=True )
+    created_by = models.ForeignKey(user, null=True, blank=True, on_delete=models.CASCADE)
+    order_items = models.ManyToManyField(Proposed_Book , related_name= 'Item_want_to_buy')
 
-class Order(models.Model):
-    date_created = models.DateTimeField(auto_now_add=True , null=True, blank=True)
-    cart = models.ForeignKey(Cart, blank=True, null=True , on_delete=models.SET_NULL)
-    items = models.ManyToManyField(Proposed_Book)
-    user = models.ForeignKey(user, related_name="orders" ,  on_delete=models.CASCADE)
+
 
 
 
