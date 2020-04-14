@@ -34,6 +34,10 @@ from .models import (
     Proposed_Book
 )
 
+
+from Users.models import user
+from books.api.serializers import ProposeBookCreationSerializer
+
 # Create your views here.
 
 class CreateBookAPIView(CreateAPIView):
@@ -53,6 +57,55 @@ class CreateBookAPIView(CreateAPIView):
     #
     #
 
+
+class TravelLougeCreationAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ProposeBookCreationSerializer
+
+    def post(self, request, format=None):
+
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+
+            creator = user.objects.get(username=request.user)
+
+            Offered_price = serializer.data['Offered_price']
+
+            Descriptions = serializer.data['Descriptions']
+
+            books = serializer.data['books']
+
+            try:
+
+                proposed = Proposed_Book(Owner=creator, Offered_price=Offered_price, Descriptions=Descriptions)
+
+
+
+                proposed.save()
+
+                for b in books:
+                    book = Books.objects.get(id=b)
+
+                    proposed.Proposed_book.add(book)
+
+                content = {
+
+                    'detail': 'successfuly added the Proposed book'}
+
+                return Response(content, status=status.HTTP_201_CREATED)
+
+            except:
+
+                content = {'detail': 'Failed to add Proposed book'}
+
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+
+            return Response(serializer.errors,
+
+                            status=status.HTTP_400_BAD_REQUEST)
 
 class BookProposedAPI(APIView):
     permission_classes=(AllowAny,)
