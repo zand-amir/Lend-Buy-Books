@@ -48,6 +48,7 @@ class Proposed_BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RateSerializer(serializers.Serializer):
+
     BookID = serializers.IntegerField()
     rate = serializers.IntegerField()
 
