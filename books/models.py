@@ -68,3 +68,5 @@ class BookRate(models.Model):
     rate=models.IntegerField(blank=True)
 
 
+
+
