@@ -38,14 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
-
     # core headers
     'corsheaders',
     # local apps:
+
     'Users',
     'books',
     'cart',
-    'comment',
+    'comment.apps.CommentConfig',
 ]
 
 MIDDLEWARE = [
