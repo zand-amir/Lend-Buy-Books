@@ -62,6 +62,18 @@ class Proposed_Book(models.Model):
         return '"' + str(self.Proposed_book) + '"' + ' Offered By ' + '"' + str(self.Owner) + '"'
 
 
+class Borrow_book(models.Model):
+
+
+    Owner = models.ForeignKey(user ,on_delete = models.CASCADE,null=True, related_name='want_to_borrow')
+    #Proposed_book = models.ForeignKey(Books ,on_delete = models.CASCADE,null=True, related_name='proposedBook')
+    Offered_to_borrow = models.ManyToManyField(Books)
+    StartBorrowingTime = models.CharField(max_length=100, blank=False, default='بدون زمان شروع ')
+    EndBorrowingTime = models.CharField(max_length=100, blank=False, default='بدون زمان پایان ')
+    Descriptions = models.CharField(max_length=1000 , blank= False , default='بدون توضیحات')
+
+
+
 class BookRate(models.Model):
     user = models.ForeignKey(user , related_name= 'user_who_rated',on_delete=models.CASCADE)
     Book = models.ForeignKey(Books , on_delete=models.CASCADE)
