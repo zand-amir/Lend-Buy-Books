@@ -15,9 +15,13 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+from books.views import RateBookAPIView
+
 
 urlpatterns = [
     url(r'^sign-up/$', SignupAPI.as_view(), name='register'),
     url(r'^token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     url(r'^token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
+    url(r'RateBook/',RateBookAPIView.as_view() , name= 'bookRate'),
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
