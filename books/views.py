@@ -7,9 +7,7 @@ from rest_framework.permissions import (
 
 )
 
-
 from rest_framework.generics import CreateAPIView
-
 
 from books.api.serializers import FindOBJID
 
@@ -22,7 +20,9 @@ from rest_framework.parsers import (
 
 from books.api.serializers import (
     CreateBookSerializer,
-    Proposed_BookSerializer
+    Proposed_BookSerializer,
+    RateSerializer
+
 )
 
 from rest_framework.response import Response
@@ -30,13 +30,14 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from .models import (
-    Books ,
-    Proposed_Book
+    Books,
+    Proposed_Book,
+    BookRate
 )
-
 
 from Users.models import user
 from books.api.serializers import ProposeBookCreationSerializer
+
 
 # Create your views here.
 
@@ -69,43 +70,64 @@ class Proposed_bookCreationAPI(APIView):
         if serializer.is_valid():
 
             creator = user.objects.get(username=request.user)
-
             Offered_price = serializer.data['Offered_price']
-
             Descriptions = serializer.data['Descriptions']
-
             books = serializer.data['books']
 
             try:
 
                 proposed = Proposed_Book(Owner=creator, Offered_price=Offered_price, Descriptions=Descriptions)
-
-
-
                 proposed.save()
-
                 for b in books:
                     book = Books.objects.get(id=b)
-
                     proposed.Proposed_book.add(book)
 
                 content = {
-
                     'detail': 'successfuly added the Proposed book'}
-
                 return Response(content, status=status.HTTP_201_CREATED)
 
             except:
-
                 content = {'detail': 'Failed to add Proposed book'}
-
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class RateBookAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = RateSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            This_user = user.objects.get(username=request.user.username)
+            bookID = serializer.data['BookID']
+            Value_of_rate = serializer.data['rate']
+
+            book = Books.objects.get(id=bookID)
+            try:
+
+                rate = BookRate.objects.get(user=This_user, Book=book)
+
+                rate.rate = Value_of_rate
+
+            except:
+
+                rate = BookRate(user=This_user, Book=book, rate=Value_of_rate)
+
+            rate.save()
+
+            content = {'Book': book.Title, 'user': This_user.username, 'rate': rate.rate,
+                       'detail': 'successfully added rate for book :) '}
+            return Response(content, status=status.HTTP_201_CREATED)
 
         else:
 
             return Response(serializer.errors,
-
                             status=status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -133,5 +155,3 @@ class Proposed_bookCreationAPI(APIView):
 #             Data['Book_title'].append({'id': b , 'title': __book.title})
 #
 #         return Response(b, status=status.HTTP_200_OK)
-
-
