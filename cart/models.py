@@ -6,13 +6,27 @@ from books.models import Proposed_Book
 # Create your models here.
 
 
+
+
+
 class Cart(models.Model):
-    #date_created = models.DateTimeField(auto_now_add=True , null=True, blank=True )
+    date_created = models.DateTimeField(auto_now_add=True , null=True, blank=True )
     created_by = models.ForeignKey(user, null=True, blank=True, on_delete=models.CASCADE)
     order_items = models.ManyToManyField(Proposed_Book , related_name= 'Item_want_to_buy')
 
 
 
+
+
+#
+# class Orders(models.Model):
+#     date = models.DateTimeField(auto_now_add=True)
+#     owner = models.ForeignKey(user, null=True, blank=True, on_delete=models.CASCADE)
+#     #products =  models.ManyToManyField(Proposed_Book , related_name= 'Item_want_to_buy')
+#     products = models.CharField(max_length=50)
+#
+# class Products(models.Model):
+#     produ = models.ManyToManyField(Proposed_Book , related_name= 'Item_want_to_buy')
 
 
 
