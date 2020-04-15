@@ -62,3 +62,9 @@ class Proposed_Book(models.Model):
         return '"' + str(self.Proposed_book) + '"' + ' Offered By ' + '"' + str(self.Owner) + '"'
 
 
+class BookRate(models.Model):
+    user = models.ForeignKey(user , related_name= 'user_who_rated',on_delete=models.CASCADE)
+    Book = models.ForeignKey(Books , on_delete=models.CASCADE)
+    rate=models.IntegerField(blank=True)
+
+
