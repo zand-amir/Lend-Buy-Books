@@ -23,3 +23,11 @@ class CartViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+
+
+    # def get_queryset(self):
+    #     user = self.request.user
+    #     queryset = self.queryset.filter(created_by='user')
+    #     return queryset
+    # def perform_create(self, serializer):
+    #     serializer.save()
