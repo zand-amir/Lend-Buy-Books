@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils import timezone
 
 from rest_framework.permissions import (
     AllowAny,
@@ -21,7 +22,10 @@ from rest_framework.parsers import (
 from books.api.serializers import (
     CreateBookSerializer,
     Proposed_BookSerializer,
-    RateSerializer
+    RateSerializer,
+    BorrowBookCreationSerializer,
+    Borrow_BookSerializer,
+    BorrowBookStartBorrowSerializer
 
 )
 
@@ -32,6 +36,7 @@ from rest_framework import status
 from .models import (
     Books,
     Proposed_Book,
+    Borrow_book,
     BookRate
 )
 
@@ -129,6 +134,69 @@ class RateBookAPIView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
+class Borrow_bookCreationAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = BorrowBookCreationSerializer
+
+    def post(self, request, format=None):
+
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+
+            creator = user.objects.get(username=request.user)
+            Descriptions = serializer.data['Descriptions']
+            books = serializer.data['books']
+
+            try:
+
+                bor = Borrow_book(Owner=creator, Descriptions=Descriptions)
+                bor.save()
+                for b in books:
+                    book = Books.objects.get(id=b)
+                    bor.Offered_to_borrow.add(book)
+
+                content = {
+                    'detail': 'successfuly added the Borrow book offer'}
+                return Response(content, status=status.HTTP_201_CREATED)
+
+            except:
+                content = {'detail': 'Failed to add Borrow book offer'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+def DeterminTimes():
+    return (timezone.now(),timezone.now() + timezone.timedelta(days=7))
+
+class StartBorrow(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = BorrowBookStartBorrowSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serizlizer_class(data=request.data)
+
+        if serializer.is_valid():
+
+            Intended_Offer_ID = serializers.data['BorrowOfferID']
+
+            try:
+                bor = Borrow_book.objects.get(id=Intended_Offer_ID)
+                (bor.StartBorrowingTime,bor.EndBorrowingTime) = DetermineTimes()
+            
+                content = {
+                    'detail': 'successfuly Started the Borrow book action'}
+                return Response(content, status=status.HTTP_201_CREATED)
+            except:
+                content = {'detail': 'Failed to Start the Borrow book action'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 #

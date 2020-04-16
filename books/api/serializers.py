@@ -4,7 +4,8 @@ from rest_framework import serializers
 from books.models import(
 
     Books ,
-    Proposed_Book
+    Proposed_Book,
+    Borrow_book
 
 )
 
@@ -40,11 +41,22 @@ class ProposeBookCreationSerializer(serializers.Serializer):
     Descriptions = serializers.CharField(allow_blank=False, max_length=100)
     books = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
 
+class BorrowBookCreationSerializer(serializers.Serializer):
+    Descriptions = serializers.CharField(allow_blank=False, max_length=100)
+    books = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
 
+class BorrowBookStartBorrowSerializer(serializers.Serializer):
+    BorrowOfferID = serializers.CharField(allow_blank=False, max_length=20)
 class Proposed_BookSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proposed_Book
+        fields = '__all__'
+
+class Borrow_BookSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Borrow_book
         fields = '__all__'
 
 class RateSerializer(serializers.Serializer):

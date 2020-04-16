@@ -59,7 +59,11 @@ class Proposed_Book(models.Model):
     Descriptions = models.CharField(max_length=100 , blank= False , default='بدون توضیحات')
 
     def __str__(self):
-        return '"' + str(self.Proposed_book) + '"' + ' Offered By ' + '"' + str(self.Owner) + '"'
+        result = ''
+        qs = self.Proposed_book.all()
+        for i in qs:
+            result += str(i)+', '
+        return result + 'Offered By ' + '"' + str(self.Owner) + '"'
 
 
 class Borrow_book(models.Model):
@@ -68,12 +72,18 @@ class Borrow_book(models.Model):
     Owner = models.ForeignKey(user ,on_delete = models.CASCADE,null=True, related_name='want_to_borrow')
     #Proposed_book = models.ForeignKey(Books ,on_delete = models.CASCADE,null=True, related_name='proposedBook')
     Offered_to_borrow = models.ManyToManyField(Books)
-    StartBorrowingTime = models.CharField(max_length=100, blank=False, default='بدون زمان شروع ')
-    EndBorrowingTime = models.CharField(max_length=100, blank=False, default='بدون زمان پایان ')
+    StartBorrowingTime = models.DateTimeField(null=True, blank=True)
+    EndBorrowingTime = models.DateTimeField(null=True, blank=True)
     Descriptions = models.CharField(max_length=1000 , blank= False , default='بدون توضیحات')
 
+    def __str__(self):
+        result = ''
+        qs = self.Offered_to_borrow.all()
+        for i in qs:
+            result += str(i)+', '
+        return result + 'Offered By ' + '"' + str(self.Owner) + '"'
 
-
+    
 class BookRate(models.Model):
     user = models.ForeignKey(user , related_name= 'user_who_rated',on_delete=models.CASCADE)
     Book = models.ForeignKey(Books , on_delete=models.CASCADE)
