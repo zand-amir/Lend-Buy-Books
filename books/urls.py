@@ -7,7 +7,9 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from books.views import( CreateBookAPIView,
-                Proposed_bookCreationAPI
+                Proposed_bookCreationAPI,
+                         Borrow_bookCreationAPI,
+                         StartBorrowAPI
                          )
 
 
@@ -19,5 +21,7 @@ urlpatterns = [
 
     url(r'CreateBook/', CreateBookAPIView.as_view(), name='create'),
     url(r'^Book-propose/$', Proposed_bookCreationAPI.as_view() , name = 'propose_book'),
+    url(r'^Book-BorrowOffer/$', Borrow_bookCreationAPI.as_view() , name = 'Borrow_offer'),
+    url(r'^Book-BorrowStart/$', StartBorrowAPI.as_view() , name = 'Borrow_start'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
