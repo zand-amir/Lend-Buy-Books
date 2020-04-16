@@ -172,7 +172,7 @@ class Borrow_bookCreationAPI(APIView):
 def DeterminTimes():
     return (timezone.now(),timezone.now() + timezone.timedelta(days=7))
 
-class StartBorrow(APIView):
+class StartBorrowAPI(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BorrowBookStartBorrowSerializer
 
