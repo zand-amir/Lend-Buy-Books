@@ -25,7 +25,8 @@ from books.api.serializers import (
     RateSerializer,
     BorrowBookCreationSerializer,
     Borrow_BookSerializer,
-    BorrowBookStartBorrowSerializer
+    BorrowBookStartBorrowSerializer ,
+    Book_all_serializer
 
 )
 
@@ -181,11 +182,11 @@ class StartBorrowAPI(APIView):
 
         if serializer.is_valid():
 
-            Intended_Offer_ID = serializers.data['BorrowOfferID']
+            Intended_Offer_ID = serializer.data['BorrowOfferID']
 
             try:
                 bor = Borrow_book.objects.get(id=Intended_Offer_ID)
-                (bor.StartBorrowingTime,bor.EndBorrowingTime) = DetermineTimes()
+                (bor.StartBorrowingTime,bor.EndBorrowingTime) = (timezone.now(),timezone.now() + timezone.timedelta(days=7))
             
                 content = {
                     'detail': 'successfuly Started the Borrow book action'}
@@ -196,7 +197,15 @@ class StartBorrowAPI(APIView):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+class Book_all_View(APIView):
+    def get(self,request,format=None,*args, **kwargs):
+
+        books = Books.objects.all()
+        serializer = Book_all_serializer(books,many=True)
+
+        return Response({"This is list of all Books ":serializer.data})
 
 
 #
