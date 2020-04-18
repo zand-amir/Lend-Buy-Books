@@ -65,6 +65,14 @@ class RateSerializer(serializers.Serializer):
     rate = serializers.IntegerField()
 
 
+class Book_all_serializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Books
+        fields = '__all__'
+
+
+
 class FindOBJID(serializers.Serializer):
     Object_ID=serializers.IntegerField()
 
