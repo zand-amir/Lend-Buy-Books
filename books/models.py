@@ -28,6 +28,7 @@ class Books(models.Model):
     Description = models.TextField(default='بدون توضیحات', blank=False)
     Categories = models.CharField(max_length=100, blank=False, null=False, choices=CATEGORY, default = "بدون دسته بندی")
     Publish_date = models.CharField(max_length=100 , blank=False , default='تاریخ ذکر نشده است')
+    publish_series = models.CharField(max_length=100, blank=False, default=' ذکر نشده است')
     Author = models.CharField(max_length=100 , blank= False , default='بدون نویسنده')
     Price = models.CharField(max_length=100 , blank= False , default='بدون قیمت')
     ISBN = models.CharField(max_length=100, blank=False, default='بدون شابک')
