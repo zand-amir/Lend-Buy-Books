@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'books',
     'cart',
     'comment.apps.CommentConfig',
+    'booklets',
 ]
 
 
