@@ -27,10 +27,10 @@ class Booklets(models.Model):
     University_name = models.CharField(max_length=100, blank=False, default='بدون ذکر نام دانشگاه')
     Professor_name = models.CharField(max_length=100, blank=False, default='بدون ذکر نام استاد')
     Semester = models.CharField(max_length=100, blank=False, default='بدون ذکر ترم')
-    BookletIMG = models.ImageField(upload_to='BookLET/%Y/%m/%d/', blank=True , name='تصویر جزوه')
-    PDF_FILE = models.FileField(upload_to='BookLETPDF/%Y/%m/%d/', blank=True, name='پی دی اف')
+    BookletIMG = models.ImageField(upload_to='BookLET/%Y/%m/%d/', blank=True)
+    PDF_FILE = models.FileField(upload_to='BookLETPDF/%Y/%m/%d/', blank=True)
     # Arash should make a decision
-    # PDF_Validate_File = models.FileField(upload_to='ValPDF/%Y/%m/%d/', blank=True, name=' پی دی اف')
+    # PDF_Validate_File = models.FileField(upload_to='ValPDF/%Y/%m/%d/', blank=True)
 
     def __unicode__(self):
         return self.Title
