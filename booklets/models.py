@@ -23,7 +23,6 @@ class Booklets(models.Model):
     Category = models.CharField(max_length=100, blank=False, null=False, choices=CATEGORY, default=CATEGORY[0][1])
     Description = models.TextField(default='بدون توضیحات', blank=False)
     Course_name = models.CharField(max_length=100, blank=False, default='بدون ذکر نام درس')
-    Price = models.CharField(max_length=100 , blank= False , default='بدون قیمت')
     University_name = models.CharField(max_length=100, blank=False, default='بدون ذکر نام دانشگاه')
     Professor_name = models.CharField(max_length=100, blank=False, default='بدون ذکر نام استاد')
     Semester = models.CharField(max_length=100, blank=False, default='بدون ذکر ترم')
