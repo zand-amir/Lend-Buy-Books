@@ -10,6 +10,8 @@ from .models import (
                 Cart
 )
 
+from books.models import Proposed_Book
+
 
 from cart.api.serializers import (
                 CartSerializer
@@ -23,6 +25,12 @@ class CartViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+
+
+
+
+
+
 
 
     # def get_queryset(self):
