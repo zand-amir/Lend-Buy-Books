@@ -41,12 +41,16 @@ class ProposeBookCreationSerializer(serializers.Serializer):
     Descriptions = serializers.CharField(allow_blank=False, max_length=100)
     books = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
 
+
 class BorrowBookCreationSerializer(serializers.Serializer):
     Descriptions = serializers.CharField(allow_blank=False, max_length=100)
     books = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
 
+
 class BorrowBookStartBorrowSerializer(serializers.Serializer):
     BorrowOfferID = serializers.CharField(allow_blank=False, max_length=20)
+
+
 class Proposed_BookSerializer(serializers.ModelSerializer):
 
     class Meta:
