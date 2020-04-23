@@ -53,6 +53,9 @@ class BookletCreationAPI(APIView):
 
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
+
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
