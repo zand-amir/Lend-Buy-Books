@@ -7,7 +7,6 @@ class BookletSeroalizer(serializers.ModelSerializer):
     class Meta:
         model = Booklets
         fields = [
-            'id',
             'Title',
             'Category',
             'Description',
@@ -16,5 +15,5 @@ class BookletSeroalizer(serializers.ModelSerializer):
             'Professor_name',
             'Semester',
             'BookletIMG',
-            'PDF_FILE'
+            'PDF_FILE',
         ]
