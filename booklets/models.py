@@ -29,7 +29,7 @@ class Booklets(models.Model):
     BookletIMG = models.ImageField(upload_to='BookLET/%Y/%m/%d/', blank=True)
     PDF_FILE = models.FileField(upload_to='BookLETPDF/%Y/%m/%d/', blank=True)
     # Arash should make a decision
-    # PDF_Validate_File = models.FileField(upload_to='ValPDF/%Y/%m/%d/', blank=True)
+    PDF_Validate_File = models.FileField(upload_to='ValPDF/%Y/%m/%d/', blank=True)
 
     def __unicode__(self):
         return self.Title
