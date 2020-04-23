@@ -56,11 +56,7 @@ class BookletCreationAPI(APIView):
                     f = request.data['PDF_FILE']
                     booklet.PDF_FILE = f
                     booklet.PDF_Validate_File = File(pageGrab(f))
-                    # some extra comment for arash
-                    # hey man
-                    #  see booklet.PDF_FILE stores the contents that you need
-                    # u can use this and write what ever you need
-                    # good luck :)
+  
                 Booklets.save()
 
                 content = {
