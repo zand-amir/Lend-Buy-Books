@@ -26,8 +26,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/User/', include('Users.urls')),
     path(r'api/Books/', include("books.urls")),
+    path(r'api/Booklets/', include("booklets.urls")),
     path('comments/',include("comment.urls")),
-    path(r'api/Actions/', include("cart.urls"))
+    path(r'api/Actions/', include("cart.urls")) ,
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
