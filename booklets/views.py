@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from rest_framework.parsers import (FileUploadParser ,
+                                    MultiPartParser ,
+                                    FormParser)
 
 from rest_framework.permissions import( AllowAny ,
                                         IsAuthenticated
@@ -7,7 +10,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 
-from .api.serializers import BookletSeroalizer
+from .api.serializers import (
+    BookletSeroalizer ,
+    Booklet_all_serializer
+)
 from Users.models import user
 from .models import Booklets
 from rest_framework import status
@@ -16,7 +22,7 @@ from rest_framework import status
 class BookletCreationAPI(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BookletSeroalizer
-
+    #parser_classes = (FileUploadParser,MultiPartParser , FormParser)
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -54,5 +60,18 @@ class BookletCreationAPI(APIView):
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+class BookletsView(APIView):
+
+    def get(self,request,format=None,*args, **kwargs):
+        def get(self, request, format=None, *args, **kwargs):
+            booklets = Booklets.objects.all()
+            serializer = Booklet_all_serializer(booklets, many=True)
+            return Response({"List of all booklets ": serializer.data})
+
+
+
+
 
 
