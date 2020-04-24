@@ -17,3 +17,10 @@ class BookletSeroalizer(serializers.ModelSerializer):
             'BookletIMG',
             'PDF_FILE',
         ]
+
+
+class Booklet_all_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booklets
+        fields = '__all__'
+
