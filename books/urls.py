@@ -10,7 +10,10 @@ from books.views import( CreateBookAPIView,
                 Proposed_bookCreationAPI,
                 Borrow_bookCreationAPI,
                 StartBorrowAPI ,
-                Book_all_View
+                Book_all_View ,
+                ViewBooksAPI,
+                Book_Advance_Search,
+                Searching_Book_View
                          )
 
 
@@ -24,6 +27,9 @@ urlpatterns = [
     url(r'^Book-propose/$', Proposed_bookCreationAPI.as_view() , name = 'propose_book'),
     url(r'^Book-BorrowOffer/$', Borrow_bookCreationAPI.as_view() , name = 'Borrow_offer'),
     url(r'^Book-BorrowStart/$', StartBorrowAPI.as_view() , name = 'Borrow_start'),
+    url(r'BookView/', ViewBooksAPI.as_view(), name='View'),
+    url(r'SearchBookView/',Searching_Book_View.as_view(),name='SearchBookView'),
+    url(r'BookAdvancedSearch/',Book_Advance_Search.as_view({'get': 'list'}),name='book_advance_search'),
     url('Books-View/',Book_all_View.as_view(),name='BooksView'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
