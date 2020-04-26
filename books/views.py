@@ -124,6 +124,7 @@ class ViewBooksAPI(ListAPIView):
         'id',
         'Title',
         'Categories',
+        'Description'
         'Publish_date',
         'publish_series',
         'Author',
@@ -140,6 +141,7 @@ class ViewBooksAPI(ListAPIView):
                 Q(id__iexact = query) |
                 Q(Title__exact=query) |
                 Q(Categories__exact=query) |
+                Q(Description__contains=query) |
                 Q(Publish_date__exact=query) |
                 Q(publish_series__exact=query) |
                 Q(Author__exact=query) |
