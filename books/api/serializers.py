@@ -36,6 +36,14 @@ class CreateBookSerializer(serializers.ModelSerializer):
                         }
 
 
+class ViewBooksSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Books
+        fields = '__all__'
+
+
+
 class ProposeBookCreationSerializer(serializers.Serializer):
     Offered_price = serializers.CharField(allow_blank=False, max_length=10)
     Descriptions = serializers.CharField(allow_blank=False, max_length=100)
