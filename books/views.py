@@ -8,6 +8,9 @@ from rest_framework.permissions import (
 
 )
 
+
+import django_filters
+
 from rest_framework.generics import CreateAPIView
 
 from books.api.serializers import FindOBJID
@@ -18,6 +21,7 @@ from rest_framework.parsers import (
     MultiPartParser,
     FormParser
 )
+from .api.filters import Dynamic_Books_search_Filter
 
 from books.api.serializers import (
     CreateBookSerializer,
@@ -26,9 +30,12 @@ from books.api.serializers import (
     BorrowBookCreationSerializer,
     Borrow_BookSerializer,
     BorrowBookStartBorrowSerializer ,
-    Book_all_serializer
+    Book_all_serializer ,
+    ViewBooksSerializer
 
 )
+
+from django.db.models import Q
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -43,8 +50,15 @@ from .models import (
 
 from Users.models import user
 from books.api.serializers import ProposeBookCreationSerializer
+from rest_framework.generics import ListAPIView
 
+from rest_framework.filters import (
+        SearchFilter,
+        OrderingFilter,
 
+)
+
+from rest_framework.viewsets import ModelViewSet
 # Create your views here.
 
 class CreateBookAPIView(CreateAPIView):
@@ -99,6 +113,71 @@ class Proposed_bookCreationAPI(APIView):
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class ViewBooksAPI(ListAPIView):
+
+    serializer_class = ViewBooksSerializer
+    filter_backends= [SearchFilter, OrderingFilter]
+
+    search_fields = [
+        'id',
+        'Title',
+        'Categories',
+        'Publish_date',
+        'publish_series',
+        'Author',
+        'Price',
+        'ISBN',
+        'Publisher'
+    ]
+
+    def get_queryset(self, *args, **kwargs):
+        queryset_list = Books.objects.all()
+        query = self.request.GET.get('q')
+        if query is not None:
+            queryset_list = queryset_list.filter(
+                Q(id__iexact = query) |
+                Q(Title__exact=query) |
+                Q(Categories__exact=query) |
+                Q(Publish_date__exact=query) |
+                Q(publish_series__exact=query) |
+                Q(Author__exact=query) |
+                Q(Price__exacti=query) |
+                Q(ISBN__exact=query) |
+                Q(Publisher__exact=query)
+            ).distinct()
+        return queryset_list
+
+
+class Searching_Book_View(ListAPIView):
+
+    filter_backends = (Dynamic_Books_search_Filter,)
+    queryset = Books.objects.all()
+    serializer_class = ViewBooksSerializer
+
+
+
+class Book_Advance_Search(ModelViewSet):
+
+    Our_fields = ('id',
+                  'Title',
+                  'Categories',
+                  'Publish_date',
+                  'publish_series',
+                  'Author',
+                  'Price',
+                  'ISBN',
+                  'Publisher'
+                  )
+
+    queryset = Books.objects.all()
+    serializer_class = ViewBooksSerializer
+
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend , SearchFilter, OrderingFilter)
+
+    filter_fields = Our_fields
+    search_fields = Our_fields
 
 
 class RateBookAPIView(APIView):
