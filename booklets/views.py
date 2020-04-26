@@ -17,7 +17,27 @@ from .api.serializers import (
 from Users.models import user
 from .models import Booklets
 from rest_framework import status
-# Create your views here.
+from django.core.files import File
+import  PyPDF2
+import random
+
+
+def pageGrab(pdFile):
+    currentFile = PyPDF2.PdfFileReader(pdFile)
+    newFile = PyPDF2.PdfFileWriter()
+
+    page = 0
+    lastpage = currentFile.getNumPages()
+    pagelist = []
+
+    while (page <= lastpage):
+        pagelist.append(random.randrange(page,min(page+50,lastpage)))
+        page += 50
+
+    for p in pagelist:
+        newFile.addPage(currentFile.getPage(p))
+
+    return newFile
 
 class BookletCreationAPI(APIView):
     permission_classes = (IsAuthenticated,)
@@ -42,12 +62,10 @@ class BookletCreationAPI(APIView):
                     booklet.BookletIMG = request.data['BookletIMG']
 
                 if ('PDF_FILE' in request.data):
-                    booklet.PDF_FILE = request.data['PDF_FILE']
-                    # some extra comment for arash
-                    # hey man
-                    #  see booklet.PDF_FILE stores the contents that you need
-                    # u can use this and write what ever you need
-                    # good luck :)
+                    f = request.data['PDF_FILE']
+                    booklet.PDF_FILE = f
+                    booklet.PDF_Validate_File = File(pageGrab(f))
+  
                 Booklets.save()
 
                 content = {
@@ -59,7 +77,9 @@ class BookletCreationAPI(APIView):
 
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
+
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class BookletsView(APIView):

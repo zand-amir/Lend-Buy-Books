@@ -36,7 +36,7 @@ class Books(models.Model):
     BookIMG = models.ImageField(upload_to='Image/%Y/%m/%d/', blank=True)
     BookIMG2 = models.ImageField(upload_to='Image/%Y/%m/%d/', blank=True)
     PDF_Book = models.FileField(upload_to='PDF/%Y/%m/%d/', blank=True )
-    Audio_Book = models.FileField(upload_to='Audios/%Y/%m/%d/', blank=True )
+    Audio_Book = models.FileField(upload_to='Audios/%Y/%m/%d/', blank=True)
 
 
 
