@@ -12,6 +12,9 @@ from Users.models import user
 from .models import Booklets
 from rest_framework import status
 from django.core.files import File
+import  PyPDF2
+import random
+
 
 def pageGrab(pdFile):
     currentFile = PyPDF2.PdfFileReader(pdFile)
