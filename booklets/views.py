@@ -100,7 +100,7 @@ class BookletsView(APIView):
             serializer = Booklet_all_serializer(booklets, many=True)
             return Response({"List of all booklets ": serializer.data})
 
-class ViewBooksAPI(ListAPIView):
+class ViewBookLetsAPI(ListAPIView):
 
     serializer_class = ViewBookletsSerializer
 
