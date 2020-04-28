@@ -103,22 +103,40 @@ class BookletsView(APIView):
 class ViewBooksAPI(ListAPIView):
 
     serializer_class = ViewBookletsSerializer
+
     filter_backends= [SearchFilter, OrderingFilter]
+
+
 
     search_fields = [
         'id',
         'Title',
-        'Categories',
+        'Category',
         'Description'
-        'Publish_date',
-        'publish_series',
-        'Author',
-        'Price',
-        'ISBN',
-        'Publisher'
+        'Course_name',
+        'University_name',
+        'Professor_name',
+        'Semester',
     ]
 
     def get_queryset(self, *args, **kwargs):
+        def get_queryset(self, *args, **kwargs):
+            queryset_list = Booklets.objects.all()
+            query = self.request.GET.get('q')
+            if query is not None:
+                queryset_list = queryset_list.filter(
+                    Q(id__exact=query) |
+                    Q(Title__exact=query) |
+                    Q(Category__exact=query) |
+                    Q(Description__contains=query) |
+                    Q(Course_name__exact=query) |
+                    Q(University_name__exact=query) |
+                    Q(Professor_name__contains=query) |
+                    Q(Semester__exact=query)
+                ).distinct()
+            return queryset_list
+
+
 
 
 
