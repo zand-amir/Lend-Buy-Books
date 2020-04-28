@@ -8,11 +8,21 @@ from rest_framework.permissions import( AllowAny ,
                                         )
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Q
 from rest_framework import generics
+
+from rest_framework.generics import ListAPIView
 
 from .api.serializers import (
     BookletSeroalizer ,
-    Booklet_all_serializer
+    Booklet_all_serializer ,
+    ViewBookletsSerializer
+)
+
+from rest_framework.filters import (
+        SearchFilter,
+        OrderingFilter,
+
 )
 from Users.models import user
 from .models import Booklets
@@ -89,6 +99,26 @@ class BookletsView(APIView):
             booklets = Booklets.objects.all()
             serializer = Booklet_all_serializer(booklets, many=True)
             return Response({"List of all booklets ": serializer.data})
+
+class ViewBooksAPI(ListAPIView):
+
+    serializer_class = ViewBookletsSerializer
+    filter_backends= [SearchFilter, OrderingFilter]
+
+    search_fields = [
+        'id',
+        'Title',
+        'Categories',
+        'Description'
+        'Publish_date',
+        'publish_series',
+        'Author',
+        'Price',
+        'ISBN',
+        'Publisher'
+    ]
+
+    def get_queryset(self, *args, **kwargs):
 
 
 
