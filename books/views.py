@@ -139,15 +139,15 @@ class ViewBooksAPI(ListAPIView):
         if query is not None:
             queryset_list = queryset_list.filter(
                 Q(id__iexact = query) |
-                Q(Title__exact=query) |
-                Q(Categories__exact=query) |
-                Q(Description__contains=query) |
-                Q(Publish_date__exact=query) |
-                Q(publish_series__exact=query) |
-                Q(Author__exact=query) |
-                Q(Price__exacti=query) |
-                Q(ISBN__exact=query) |
-                Q(Publisher__exact=query)
+                Q(Title__iexact=query) |
+                Q(Categories__iexact=query) |
+                Q(Description__icontains=query) |
+                Q(Publish_date__iexact=query) |
+                Q(publish_series__iexact=query) |
+                Q(Author__iexact=query) |
+                Q(Price__iexact=query) |
+                Q(ISBN__iexact=query) |
+                Q(Publisher__iexact=query)
             ).distinct()
         return queryset_list
 
