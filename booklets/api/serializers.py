@@ -24,3 +24,22 @@ class Booklet_all_serializer(serializers.ModelSerializer):
         model = Booklets
         fields = '__all__'
 
+class ViewBookletsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Booklets
+        fields = [
+            'Title',
+            'Category',
+            'Description',
+            'Course_name',
+            'University_name',
+            'Professor_name',
+            'Semester',
+            'BookletIMG',
+            'PDF_FILE',
+            'PDF_Validate_File',
+        ]
+
+
+
