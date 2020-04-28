@@ -29,6 +29,7 @@ class ViewBookletsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booklets
         fields = [
+            'id',
             'Title',
             'Category',
             'Description',
