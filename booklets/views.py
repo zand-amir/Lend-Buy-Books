@@ -120,21 +120,20 @@ class ViewBookLetsAPI(ListAPIView):
     ]
 
     def get_queryset(self, *args, **kwargs):
-        def get_queryset(self, *args, **kwargs):
-            queryset_list = Booklets.objects.all()
-            query = self.request.GET.get('q')
-            if query is not None:
-                queryset_list = queryset_list.filter(
-                    Q(id__iexact=query) |
-                    Q(Title__iexact=query) |
-                    Q(Category__iexact=query) |
-                    Q(Description__icontains=query) |
-                    Q(Course_name__iexact=query) |
-                    Q(University_name__iexact=query) |
-                    Q(Professor_name__icontains=query) |
-                    Q(Semester__iexact=query)
-                ).distinct()
-            return queryset_list
+        queryset_list = Booklets.objects.all()
+        query = self.request.GET.get('q')
+        if query is not None:
+            queryset_list = queryset_list.filter(
+                Q(id__iexact=query) |
+                Q(Title__iexact=query) |
+                Q(Category__iexact=query) |
+                Q(Description__icontains=query) |
+                Q(Course_name__iexact=query) |
+                Q(University_name__iexact=query) |
+                Q(Professor_name__icontains=query) |
+                Q(Semester__iexact=query)
+            ).distinct()
+        return queryset_list
 
 
 
