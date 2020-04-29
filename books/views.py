@@ -259,7 +259,7 @@ class StartBorrowAPI(APIView):
     serializer_class = BorrowBookStartBorrowSerializer
 
     def post(self, request, format=None):
-        serializer = self.serizlizer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
 
