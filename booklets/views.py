@@ -148,7 +148,7 @@ class Searching_Booklets_View(ListAPIView):
     serializer_class = ViewBookletsSerializer
 
 
-class Book_Advance_Search(ModelViewSet):
+class Booklets_Advance_Search(ModelViewSet):
     Our_fields = ('id',
                   'Title',
                   'Category',
