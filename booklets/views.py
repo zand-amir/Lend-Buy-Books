@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 from django.db.models import Q
 from rest_framework import generics
 
+from .api.filters import Dynamic_BookLets_search_Filter
+
 from rest_framework.generics import ListAPIView
 
 from .api.serializers import (
@@ -134,6 +136,15 @@ class ViewBookLetsAPI(ListAPIView):
                 Q(Semester__iexact=query)
             ).distinct()
         return queryset_list
+
+
+class Searching_Booklets_View(ListAPIView):
+
+    filter_backends = (Dynamic_BookLets_search_Filter,)
+    queryset = Booklets.objects.all()
+    serializer_class = ViewBookletsSerializer
+
+
 
 
 
