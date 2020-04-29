@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from rest_framework.parsers import (FileUploadParser ,
-                                    MultiPartParser ,
+from rest_framework.parsers import (FileUploadParser,
+                                    MultiPartParser,
                                     FormParser)
 
-from rest_framework.permissions import( AllowAny ,
+from rest_framework.permissions import (AllowAny,
                                         IsAuthenticated
                                         )
 from rest_framework.response import Response
@@ -15,22 +15,26 @@ from .api.filters import Dynamic_BookLets_search_Filter
 
 from rest_framework.generics import ListAPIView
 
+from rest_framework.viewsets import ModelViewSet
+
 from .api.serializers import (
-    BookletSeroalizer ,
-    Booklet_all_serializer ,
+    BookletSeroalizer,
+    Booklet_all_serializer,
     ViewBookletsSerializer
 )
 
 from rest_framework.filters import (
-        SearchFilter,
-        OrderingFilter,
+    SearchFilter,
+    OrderingFilter,
 
 )
+
+import django_filters
 from Users.models import user
 from .models import Booklets
 from rest_framework import status
 from django.core.files import File
-import  PyPDF2
+import PyPDF2
 import random
 
 
@@ -43,7 +47,7 @@ def pageGrab(pdFile):
     pagelist = []
 
     while (page <= lastpage):
-        pagelist.append(random.randrange(page,min(page+50,lastpage)))
+        pagelist.append(random.randrange(page, min(page + 50, lastpage)))
         page += 50
 
     for p in pagelist:
@@ -51,10 +55,12 @@ def pageGrab(pdFile):
 
     return newFile
 
+
 class BookletCreationAPI(APIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BookletSeroalizer
-    #parser_classes = (FileUploadParser,MultiPartParser , FormParser)
+
+    # parser_classes = (FileUploadParser,MultiPartParser , FormParser)
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -67,18 +73,19 @@ class BookletCreationAPI(APIView):
             Semester = serializer.data['Semester']
             try:
 
-                booklet = Booklets(Owner = Owner , Title = Title , Category = Category , Description = Description , Course_name=Course_name ,
-                                   University_name = University_name , Semester =Semester)
+                booklet = Booklets(Owner=Owner, Title=Title, Category=Category, Description=Description,
+                                   Course_name=Course_name,
+                                   University_name=University_name, Semester=Semester)
 
                 if ('BookletIMG' in request.data):
                     booklet.BookletIMG = request.data['BookletIMG']
 
-                if ('PDF_FILE' in request.data):
+                if 'PDF_FILE' in request.data:
                     f = request.data['PDF_FILE']
                     booklet.PDF_FILE = f
                     booklet.PDF_Validate_File = File(pageGrab(f))
-  
-                Booklets.save()
+
+                booklet.save()
 
                 content = {
                     'detail': 'successfully added booklet'}
@@ -90,25 +97,22 @@ class BookletCreationAPI(APIView):
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:
 
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BookletsView(APIView):
 
-    def get(self,request,format=None,*args, **kwargs):
-        def get(self, request, format=None, *args, **kwargs):
-            booklets = Booklets.objects.all()
-            serializer = Booklet_all_serializer(booklets, many=True)
-            return Response({"List of all booklets ": serializer.data})
+    def get(self, request, format=None, *args, **kwargs):
+
+        booklets = Booklets.objects.all()
+        serializer = Booklet_all_serializer(booklets, many=True)
+        return Response({"List of all booklets ": serializer.data})
+
 
 class ViewBookLetsAPI(ListAPIView):
-
     serializer_class = ViewBookletsSerializer
 
-    filter_backends= [SearchFilter, OrderingFilter]
-
-
+    filter_backends = [SearchFilter, OrderingFilter]
 
     search_fields = [
         'id',
@@ -139,20 +143,26 @@ class ViewBookLetsAPI(ListAPIView):
 
 
 class Searching_Booklets_View(ListAPIView):
-
     filter_backends = (Dynamic_BookLets_search_Filter,)
     queryset = Booklets.objects.all()
     serializer_class = ViewBookletsSerializer
 
 
+class Book_Advance_Search(ModelViewSet):
+    Our_fields = ('id',
+                  'Title',
+                  'Category',
+                  'Description'
+                  'Course_name',
+                  'University_name',
+                  'Professor_name',
+                  'Semester',
+                  )
 
+    queryset = Booklets.objects.all()
+    serializer_class = ViewBookletsSerializer
 
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, SearchFilter, OrderingFilter)
 
-
-
-
-
-
-
-
-
+    filter_fields = Our_fields
+    search_fields = Our_fields
