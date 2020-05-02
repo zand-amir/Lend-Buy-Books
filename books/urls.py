@@ -13,7 +13,8 @@ from books.views import( CreateBookAPIView,
                 Book_all_View ,
                 ViewBooksAPI,
                 Book_Advance_Search,
-                Searching_Book_View
+                Searching_Book_View,
+                         WishBook
                          )
 
 
@@ -31,5 +32,6 @@ urlpatterns = [
     url(r'SearchBookView/',Searching_Book_View.as_view(),name='SearchBookView'),
     url(r'BookAdvancedSearch/',Book_Advance_Search.as_view({'get': 'list'}),name='book_advance_search'),
     url('Books-View/',Book_all_View.as_view(),name='BooksView'),
+    url(r'^Book-Wish/$', WishBook.as_view() , name = 'Book_Wish'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

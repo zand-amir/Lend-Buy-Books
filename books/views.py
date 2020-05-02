@@ -31,7 +31,8 @@ from books.api.serializers import (
     Borrow_BookSerializer,
     BorrowBookStartBorrowSerializer ,
     Book_all_serializer ,
-    ViewBooksSerializer
+    ViewBooksSerializer,
+    WishSerializer
 
 )
 
@@ -45,7 +46,8 @@ from .models import (
     Books,
     Proposed_Book,
     Borrow_book,
-    BookRate
+    BookRate,
+    Wishlist
 )
 
 from Users.models import user
@@ -65,7 +67,6 @@ class CreateBookAPIView(CreateAPIView):
     queryset = Books.objects.all()
     serializer_class = CreateBookSerializer
     permission_classes = (IsAuthenticated, IsAdminUser)
-    parser_classes = (MultiPartParser, FormParser)
 
     # def post(self, request, format=None):
     #     print(request.data)
@@ -101,6 +102,12 @@ class Proposed_bookCreationAPI(APIView):
                 for b in books:
                     book = Books.objects.get(id=b)
                     proposed.Proposed_book.add(book)
+                    if Wishlist.objects.filter(WishedBook=b).exists():
+                        wi = Wishlist.objects.get(WishedBook=b).Wishers
+                        if wi.exists():
+                            for u in wi.all():
+                                print(str(u)+' wants this book')
+                                #notify the u user (send emails,etc...)
 
                 content = {
                     'detail': 'successfuly added the Proposed book'}
@@ -287,6 +294,46 @@ class Book_all_View(APIView):
         serializer = Book_all_serializer(books,many=True)
 
         return Response({"This is list of all Books ":serializer.data})
+
+class WishBook(APIView):
+    permision_classes = (IsAuthenticated,)
+    serializer_class = WishSerializer
+
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            try:
+                BID = serializer.data['BookID']
+                print(BID)
+                book = Books.objects.get(id=BID)
+                print(book)
+                if Wishlist.objects.filter(WishedBook = book).exists():
+                    print(1111111111111111)
+                    WlInstance = Wishlist.objects.get(WishedBook=book)
+                    print(2222222222222222)
+                else:
+                    WlInstance = Wishlist(WishedBook=book)
+                print("WI CREATED")
+                WlInstance.save()
+                wisher = user.objects.get(username=request.user)
+                print(wisher)
+                WlInstance.Wishers.add(wisher)
+                print('added')
+                propose_list = Proposed_Book.objects.filter(Proposed_book = book)
+                if propose_list.exists():
+                    content = {'detail' : 'offers exist','offer_list':propose_list}
+                    return Response(content, status=status.HTTP_201_CREATED)
+                else:
+                    content = {'detail' : 'no offer'}
+                    return Response(content, status=status.HTTP_201_CREATED)
+            except:
+                content = {'detail': 'Failed to perform the action'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 #

@@ -90,6 +90,10 @@ class BookRate(models.Model):
     Book = models.ForeignKey(Books , on_delete=models.CASCADE)
     rate=models.IntegerField(blank=True)
 
+class Wishlist(models.Model):
+    WishedBook = models.OneToOneField(Books, on_delete=models.CASCADE)
+    Wishers = models.ManyToManyField(user, blank=True)
+
 
 
 

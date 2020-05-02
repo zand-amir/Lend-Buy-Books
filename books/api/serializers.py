@@ -83,6 +83,8 @@ class Book_all_serializer(serializers.ModelSerializer):
         model = Books
         fields = '__all__'
 
+class WishSerializer(serializers.Serializer):
+    BookID = serializers.CharField()
 
 
 class FindOBJID(serializers.Serializer):
