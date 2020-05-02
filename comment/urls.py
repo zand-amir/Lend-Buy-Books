@@ -1,10 +1,16 @@
-from rest_framework import routers
-from django.urls import path, include
-from .views import CommentViewSet
+from .views import CommentViewAPI,SubmitCommentAPI
 
-router = routers.DefaultRouter()
-router.register('comments',CommentViewSet)
+
+from django.conf.urls import url
+
+from django.contrib import admin
+
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('',include(router.urls))
-    ]
+
+    url(r'SubmitComment/', SubmitCommentAPI.as_view() , name='Comment_Submit'),
+    url(r'ViewComments/' , CommentViewAPI.as_view() , name='Comment_View') ,
+   
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,13 +1,64 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from .models import Comment
 from books.models import Books
-from .serializers import CommentSerializer
+from Users.models import user
+from .serializers import CommentSerializer, CommentCreationSerializer
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAdminUser
 
-class CommentViewSet(viewsets.ModelViewSet):
+)
+from rest_framework.response import Response
+from rest_framework import status
+
+class CommentViewAPI(APIView):
     serializer_class = CommentSerializer
-    queryset = Comment.objects.all()
+    perimission_classes = (IsAuthenticated,)
+    #queryset = Comment.objects.all()
 
-    def get_queryset(self, request):
-        Intended_Book = Books.objects.get(id = request.book_id)
-        return self.queryset.filter(Addressed_Book = Intended_Book)
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            try:
+                Intended_Book = Books.objects.get(id = serializer.data['BookID'])
+                comlist = [{'auth':com.Comment_Author.username ,'text':com.Comment_Text}for com in Comment.objects.filter(Addressed_Book = Intended_Book)]
+                content = {'detail':'Success','Comments':comlist}
+                #print('comlist :'+str(comlist))
+                return Response(content, status=status.HTTP_201_CREATED)
+            except:
+                content = {'detail': 'Failure'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+
+class SubmitCommentAPI(APIView):
+    perimission_classes = (IsAuthenticated,)
+    serializer_class = CommentCreationSerializer
+
+    def post(self, request, format = None):
+        serializer = self.serializer_class(data = request.data)
+
+        if serializer.is_valid():
+            Author = user.objects.get(username=request.user)
+            CT = serializer.data['Comment_text']
+            AB = Books.objects.get(id=serializer.data['BookID'])
+            try:
+                CommentInstance = Comment(Addressed_Book = AB, Comment_Author = Author, Comment_Text = CT)
+                CommentInstance.save()
+                content = {
+                   'detail': 'successfuly Submiited the comment'}
+                return Response(content, status=status.HTTP_201_CREATED)
+            except:
+               content = {'detail': 'Failed to Submit the comment'}
+               return Response(content, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+            
+    

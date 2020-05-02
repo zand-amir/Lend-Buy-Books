@@ -6,8 +6,8 @@ from Users.models import user
 
 
 class Comment(models.Model):
-    Addressed_Book = models.ForeignKey(Books, null=True, on_delete=models.CASCADE)
-    Comment_Author = models.OneToOneField(user,on_delete=models.CASCADE)
+    Addressed_Book = models.ForeignKey(Books,unique = False, null=True, on_delete=models.CASCADE)
+    Comment_Author = models.ForeignKey(user,unique = False, on_delete=models.CASCADE)
     Comment_Text = models.TextField(default='نظر کاربر')
 
     #Owners_HR = models.CharField(max_length=8,choices=[('0','bad'),('1','medium'),('2','good'),('n/a','N/A')],default=('n/a'))        #Owner`s Honesty Rating
