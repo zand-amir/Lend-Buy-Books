@@ -76,8 +76,8 @@ class CreateBookAPIView(CreateAPIView):
     #         serializer.save()
     #         return JsonResponse(serializer.data)
     #     return JsonResponse(serializer.errors, status=400)
-    #
-    #
+
+
 
 
 class Proposed_bookCreationAPI(APIView):
