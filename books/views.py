@@ -8,10 +8,12 @@ from rest_framework.permissions import (
 
 )
 
+from django.db.models import Avg
 
 import django_filters
 
 from rest_framework.generics import CreateAPIView
+
 
 from books.api.serializers import FindOBJID
 
@@ -33,7 +35,8 @@ from books.api.serializers import (
     BorrowBookStartBorrowSerializer ,
     Book_all_serializer ,
     ViewBooksSerializer,
-    WishSerializer
+    WishSerializer,
+    RateViewSerializer
 
 )
 
@@ -158,6 +161,39 @@ class ViewBooksAPI(ListAPIView):
                 Q(Publisher__iexact=query)
             ).distinct()
         return queryset_list
+
+
+class ViewRateapiView(ListAPIView):
+    #serializer_class = RateViewSerializer
+
+    def get(self , request , *args , **kwargs):
+        getBookid = self.kwargs['BookID']
+        list_of_all_rates = BookRate.objects.filter(Book__exact=getBookid)
+        saved_list = []
+        for rates in list_of_all_rates:
+            saved_list.append(rates.rate)
+        sum = 0
+        length_of_int =len(saved_list)
+        if length_of_int !=0:
+            for i in saved_list:
+                sum += i
+            sum =sum/length_of_int
+
+            content = {"average":sum}
+            return Response(content,status=status.HTTP_200_OK)
+        else:
+            content = {"detail":"No user rated yet"}
+            return Response(content , status = status.HTTP_204_NO_CONTENT)
+
+    # def get_queryset(self):
+    #
+    #     getBookid = self.kwargs['BookID']
+    #     return BookRate.objects.filter(Book__exact=getBookid)
+
+
+
+
+
 
 
 class Searching_Book_View(ListAPIView):
