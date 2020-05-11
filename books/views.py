@@ -24,6 +24,7 @@ from rest_framework.parsers import (
 from .api.filters import Dynamic_Books_search_Filter
 
 from books.api.serializers import (
+    rateViewSerializer,
     CreateBookSerializer,
     Proposed_BookSerializer,
     RateSerializer,
@@ -66,7 +67,7 @@ from rest_framework.viewsets import ModelViewSet
 class CreateBookAPIView(CreateAPIView):
     queryset = Books.objects.all()
     serializer_class = CreateBookSerializer
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated,)
 
     # def post(self, request, format=None):
     #     print(request.data)
@@ -221,6 +222,8 @@ class RateBookAPIView(APIView):
 
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 class Borrow_bookCreationAPI(APIView):
