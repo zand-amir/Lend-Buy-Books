@@ -90,3 +90,6 @@ class WishSerializer(serializers.Serializer):
 class FindOBJID(serializers.Serializer):
     Object_ID=serializers.IntegerField()
 
+class rateViewSerializer(serializers.Serializer):
+    BookID = serializers.IntegerField()
+

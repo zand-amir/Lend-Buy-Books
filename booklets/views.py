@@ -65,16 +65,18 @@ class BookletCreationAPI(APIView):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             Owner = user.objects.get(username=request.user)
-            Title = serializer.data['Title']
-            Category = serializer.data['Category']
-            Description = serializer.data['Description']
-            Course_name = serializer.data['Course_name']
-            University_name = serializer.data['University_name']
-            Semester = serializer.data['Semester']
+            Title = serializer.data.get("Title")
+            Category = serializer.data.get("Category")
+            Professor_name = serializer.data.get("Professor_name")
+            Description = serializer.data.get("Description")
+            Course_name = serializer.data.get("Course_name")
+            University_name = serializer.data.get("University_name")
+            Semester = serializer.data.get("Semester")
+
             try:
 
                 booklet = Booklets(Owner=Owner, Title=Title, Category=Category, Description=Description,
-                                   Course_name=Course_name,
+                                   Course_name=Course_name,Professor_name = Professor_name,
                                    University_name=University_name, Semester=Semester)
 
                 if ('BookletIMG' in request.data):

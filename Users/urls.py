@@ -16,6 +16,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from books.views import RateBookAPIView
+from django.contrib.auth.views import LogoutView
 
 
 urlpatterns = [
