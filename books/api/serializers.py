@@ -5,7 +5,8 @@ from books.models import(
 
     Books ,
     Proposed_Book,
-    Borrow_book
+    Borrow_book,
+    BookRate
 
 )
 
@@ -75,6 +76,14 @@ class RateSerializer(serializers.Serializer):
 
     BookID = serializers.IntegerField()
     rate = serializers.IntegerField()
+
+class RateViewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BookRate
+        fields = '__all__'
+
+
 
 
 class Book_all_serializer(serializers.ModelSerializer):
