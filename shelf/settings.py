@@ -112,6 +112,8 @@ DATABASES = {
 CORS_ORIGIN_WHITELIST = (
 
     'http://localhost:3000',
+    'http://pollos99.pythonanywhere.com',
+    'http://adashti.pythonanywhere.com',
 
 )
 
