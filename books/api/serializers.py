@@ -82,6 +82,11 @@ class RateViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookRate
         fields = '__all__'
+class Propose_bookView_Serializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Proposed_Book
+        fields = '__all__'
 
 
 
