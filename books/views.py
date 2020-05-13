@@ -199,7 +199,7 @@ class ViewProposed_book_apiView(ListAPIView):
 
     def get_queryset(self):
         getID = self.kwargs['booksID']
-        return Proposed_Book.objects.filter(Proposed_book__exact=getID)
+        return Proposed_Book.objects.filter(Proposed_book__in=getID)
     # def get_queryset(self):
     #
     #     getBookid = self.kwargs['BookID']
