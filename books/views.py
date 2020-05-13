@@ -36,7 +36,8 @@ from books.api.serializers import (
     Book_all_serializer ,
     ViewBooksSerializer,
     WishSerializer,
-    RateViewSerializer
+    RateViewSerializer,
+    Propose_bookView_Serializer
 
 )
 
@@ -188,11 +189,21 @@ class ViewRateapiView(ListAPIView):
     # def get_queryset(self):
     #
     #     getBookid = self.kwargs['BookID']
+    #     return BookRate.objects.filter(Boo
+
+
+
+class ViewProposed_book_apiView(ListAPIView):
+
+    serializer_class = Propose_bookView_Serializer
+
+    def get_queryset(self):
+        getID = self.kwargs['booksID']
+        return Proposed_Book.objects.filter(Proposed_book__exact=getID)
+    # def get_queryset(self):
+    #
+    #     getBookid = self.kwargs['BookID']
     #     return BookRate.objects.filter(Book__exact=getBookid)
-
-
-
-
 
 
 
