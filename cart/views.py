@@ -43,7 +43,7 @@ class Remove_Item_from_list(APIView):
             return Response(status=status.HTTP_200_OK)
 
         else:
-            content = {'detail': 'Failed to delete item'}
+            content = {'detail': 'Failed to delete items'}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
 
