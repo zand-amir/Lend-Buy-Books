@@ -1,6 +1,8 @@
 
 from rest_framework import serializers
 
+from Users.models import user
+
 from books.models import(
 
     Books ,
@@ -83,6 +85,9 @@ class RateViewSerializer(serializers.ModelSerializer):
         model = BookRate
         fields = '__all__'
 class Propose_bookView_Serializer(serializers.ModelSerializer):
+
+    Owner = serializers.SlugRelatedField(slug_field="username",queryset=user.objects.all())
+
 
     class Meta:
         model = Proposed_Book

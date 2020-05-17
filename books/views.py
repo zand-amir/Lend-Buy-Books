@@ -95,7 +95,7 @@ class Proposed_bookCreationAPI(APIView):
 
         if serializer.is_valid():
 
-            creator = user.objects.get(username=request.user)
+            creator = user.objects.get(username=request.user.username)
             Offered_price = serializer.data['Offered_price']
             Descriptions = serializer.data['Descriptions']
             books = serializer.data['books']
@@ -190,6 +190,22 @@ class ViewRateapiView(ListAPIView):
     #
     #     getBookid = self.kwargs['BookID']
     #     return BookRate.objects.filter(Boo
+
+# class ViewProposeAdvanceapiView(ListAPIView):
+#     #serializer_class = RateViewSerializer
+#
+#     def get(self , request , *args , **kwargs):
+#         getBookProposeid = self.kwargs['booksID']
+#         Offer =Proposed_Book.objects.filter(Proposed_book__exact=getBookProposeid)
+#         for instance in Offer:
+#             instance.Owner.username
+#             instance.Owner.address
+#
+#
+#         print(.get())
+#
+#
+#         return Response({"aa":"aa"},status=status.HTTP_200_OK)
 
 
 
