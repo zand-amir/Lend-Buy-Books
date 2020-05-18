@@ -9,3 +9,4 @@ class user(User):
     postal_code = models.CharField( max_length = 15 , blank=True)
     phone_number = models.CharField(max_length=15)
     img = models.ImageField(default='media/profile/images.png',upload_to='profile')
+    credit = models.IntegerField(default=0)

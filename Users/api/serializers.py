@@ -22,3 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username', 'email', 'first_name', 'last_name', 'password', 'phone_number', 'address', 'postal_code',
             'img')
+
+class CreditSerializer(serializers.Serializer):
+    Amount = serializers.IntegerField()
+

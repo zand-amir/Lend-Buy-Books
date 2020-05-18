@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import user
-from Users.api.serializers import UserInformationSerializer
+from Users.api.serializers import UserInformationSerializer, CreditSerializer
 
 
 # Create your views here.
@@ -53,6 +53,24 @@ class SignupAPI(APIView):
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AddCreditAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CreditSerializer
+
+    def post(self, request, format = None):
+        serializer = self.serializer_class(data=request.data)
+        
+        if serializer.is_valid():
+            usr = user.objects.get(username = self.request.user)
+            usr.credit += serializer.data['Amount']
+            usr.save()
+            content = {'detail': 'success'}
+            return Response(content, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class UserProfile(APIView):
