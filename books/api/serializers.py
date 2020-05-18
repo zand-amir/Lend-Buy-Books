@@ -48,10 +48,12 @@ class ViewBooksSerializer(serializers.ModelSerializer):
 
 
 class ProposeBookCreationSerializer(serializers.Serializer):
-    Offered_price = serializers.CharField(allow_blank=False, max_length=10)
+    Offered_price = serializers.IntegerField()
     Descriptions = serializers.CharField(allow_blank=False, max_length=100)
     books = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
 
+class BuySerializer(serializers.Serializer):
+    OfferID = serializers.IntegerField()
 
 class BorrowBookCreationSerializer(serializers.Serializer):
     Descriptions = serializers.CharField(allow_blank=False, max_length=100)

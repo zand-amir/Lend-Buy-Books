@@ -56,7 +56,7 @@ class Proposed_Book(models.Model):
     Owner = models.ForeignKey(user ,on_delete = models.CASCADE,null=True, related_name='have_book')
     #Proposed_book = models.ForeignKey(Books ,on_delete = models.CASCADE,null=True, related_name='proposedBook')
     Proposed_book = models.ManyToManyField(Books)
-    Offered_price = models.CharField(max_length=100 , blank= False , default='بدون قیمت')
+    Offered_price = models.IntegerField(default=0)
     Descriptions = models.CharField(max_length=100 , blank= False , default='بدون توضیحات')
 
     def __str__(self):

@@ -8,13 +8,14 @@ from django.contrib import admin
 
 from books.views import( CreateBookAPIView,
                 Proposed_bookCreationAPI,
+                BuyAPI,
                 Borrow_bookCreationAPI,
                 StartBorrowAPI ,
                 Book_all_View ,
                 ViewBooksAPI,
                 Book_Advance_Search,
                 Searching_Book_View,
-                         WishBook,
+                WishBook,
                 ViewRateapiView,
                 ViewProposed_book_apiView,
                 # ViewProposeAdvanceapiView
@@ -29,6 +30,7 @@ urlpatterns = [
 
     url(r'CreateBook/', CreateBookAPIView.as_view(), name='create'),
     url(r'^Book-propose/$', Proposed_bookCreationAPI.as_view() , name = 'propose_book'),
+    url(r'^Buy/$', BuyAPI.as_view() , name = 'Buy'),
     url(r'^Book-BorrowOffer/$', Borrow_bookCreationAPI.as_view() , name = 'Borrow_offer'),
     url(r'^Book-BorrowStart/$', StartBorrowAPI.as_view() , name = 'Borrow_start'),
     url(r'BookView/', ViewBooksAPI.as_view(), name='View'),

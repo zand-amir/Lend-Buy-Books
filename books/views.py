@@ -29,6 +29,7 @@ from books.api.serializers import (
     rateViewSerializer,
     CreateBookSerializer,
     Proposed_BookSerializer,
+    BuySerializer,
     RateSerializer,
     BorrowBookCreationSerializer,
     Borrow_BookSerializer,
@@ -122,6 +123,38 @@ class Proposed_bookCreationAPI(APIView):
                 content = {'detail': 'Failed to add Proposed book'}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class BuyAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = BuySerializer
+
+    def post(self, request, format=None):
+
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            Buyer = user.objects.get(username=request.user)
+            Offer = Proposed_Book.objects.get(id=serializer.data['OfferID'])
+            a = Offer.Offered_price
+            b = Buyer.credit
+            print(a+5)
+            print(b+3)
+
+            if Buyer.credit < Offer.Offered_price:
+                content = {
+                    'detail':'User does not have the requested credit!'}
+                return Response(content, status=status.HTTP_200_OK)
+            Buyer.credit -= Offer.Offered_price
+            Buyer.save()
+            print(str(Offer) + 'has been completed.')
+            Offer.delete()
+            content = {
+                    'detail': 'Success'}
+            return Response(content, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
