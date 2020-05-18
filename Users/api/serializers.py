@@ -5,7 +5,7 @@ from Users.models import user
 from rest_framework import serializers
 
 
-class SignupSerializer(serializers.Serializer):
+class UserInformationSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
     email = serializers.EmailField(allow_blank=True)
