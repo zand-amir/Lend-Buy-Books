@@ -45,7 +45,7 @@ class SignupAPI(APIView):
                 new_user.address = address
                 new_user.postal_code = postal_code
                 if ('img' in request.data):
-                    new_user.avatar = request.data['img']
+                    new_user.img = request.data['img']
                 new_user.save()
                 content = {'detail': 'new user successfully created ! '}
 
