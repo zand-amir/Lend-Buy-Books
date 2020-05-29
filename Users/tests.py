@@ -48,5 +48,6 @@ class LoginTestCase(APITestCase):
             "username":random_username,
             "password": "SomeStrongPassword"
         }
+
         response = self.client.post("/api/User/token/",data_Login)
         self.assertEqual(response.status_code,status.HTTP_200_OK)
