@@ -21,7 +21,8 @@ from books.api.serializers import FindOBJID
 
 from rest_framework.parsers import (
     MultiPartParser,
-    FormParser
+    FormParser,
+    JSONParser
 )
 from .api.filters import Dynamic_Books_search_Filter
 
@@ -73,6 +74,7 @@ class CreateBookAPIView(CreateAPIView):
     queryset = Books.objects.all()
     serializer_class = CreateBookSerializer
     permission_classes = (IsAuthenticated,)
+
 
     # def post(self, request, format=None):
     #     print(request.data)
