@@ -14,7 +14,6 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
 from books.views import RateBookAPIView
 from django.contrib.auth.views import LogoutView
 
