@@ -7,7 +7,7 @@ import requests
 
 from PIL import Image
 
-from .models import user
+
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase ,APIClient
@@ -42,10 +42,10 @@ class CreationBookTestCase(APITestCase):
 
     def test_CreateBook(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
-        image = Image.new('RGB' , (100,100))
-        temp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
-        image.save(temp_file)
-        temp_file.seek(0)
+        # image = Image.new('RGB' , (100,100))
+        # temp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
+        # image.save(temp_file)
+        # temp_file.seek(0)
         data = {
             "Title": "TestTitle",
             "Description": "TestDescription",
@@ -56,16 +56,16 @@ class CreationBookTestCase(APITestCase):
             "Price": "TestPrice",
             "ISBN": "TestISBN",
             "Publisher": "TestPub",
-            "BookIMG": temp_file
+            #"BookIMG": temp_file
         }
         response = self.client.post("/api/Books/CreateBook/",data=data)
         self.assertEqual(status.HTTP_201_CREATED , response.status_code)
     def test_UnAuthorizedUserCreateBook(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+ "")
-        image = Image.new('RGB' , (100,100))
-        temp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
-        image.save(temp_file)
-        temp_file.seek(0)
+        # image = Image.new('RGB' , (100,100))
+        # temp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
+        # image.save(temp_file)
+        # temp_file.seek(0)
         data = {
             "Title": "TestTitle",
             "Description": "TestDescription",
@@ -76,7 +76,7 @@ class CreationBookTestCase(APITestCase):
             "Price": "TestPrice",
             "ISBN": "TestISBN",
             "Publisher": "TestPub",
-            "BookIMG": temp_file
+            #"BookIMG": temp_file
         }
         response = self.client.post("/api/Books/CreateBook/",data=data)
         self.assertEqual(status.HTTP_401_UNAUTHORIZED , response.status_code)
