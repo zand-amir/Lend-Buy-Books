@@ -81,6 +81,14 @@ class CreationBookTestCase(APITestCase):
         response = self.client.post("/api/Books/CreateBook/",data=data)
         self.assertEqual(status.HTTP_401_UNAUTHORIZED , response.status_code)
 
+    def test_ViewBookTestCase(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        creation = self.client.post("/api/Books/CreateBook/", {})
+        response = self.client.get("/api/Books/BookView/?q={}/".format(creation.data["id"]))
+        self.assertEqual(status.HTTP_200_OK,response.status_code)
+
+
+
 
 
 
