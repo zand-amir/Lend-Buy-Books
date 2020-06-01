@@ -131,6 +131,16 @@ class ProposeBookTestCase(APITestCase):
         response = self.client.post("/api/Books/Book-propose/" , data=data_to_propose)
         self.assertEqual(status.HTTP_201_CREATED,response.status_code)
 
+    def test_RateBook(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        data_to_rate = {
+            "BookID" : self.ID_of_book ,
+            "rate" : random.randint(1,20)
+
+        }
+        response = self.client.post("/api/User/RateBook/", data=data_to_rate)
+        self.assertEqual(status.HTTP_201_CREATED , response.status_code)
+
 
 
 
