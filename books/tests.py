@@ -177,6 +177,20 @@ class SearchBookTestCases(APITestCase):
         response = self.client.get('/api/Books/SearchBookView/?q={}'.format(self.ID_of_book))
         self.assertEqual(status.HTTP_200_OK , response.status_code)
 
+    def test_AdvanceSearch(self):
+        response = self.client.get("/api/Books/BookAdvancedSearch/?id={}"
+                                   "&Title={}"
+                                   "&Description={}"
+                                   "&Categories={}"
+                                   "&Publish_date={}".format(
+            self.ID_of_book,
+            self.Book_title,
+            self.Book_Description,
+            self.Book_Category,
+            self.Book_publish_date))
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+
 
 
 
