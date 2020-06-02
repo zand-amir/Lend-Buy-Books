@@ -142,8 +142,40 @@ class ProposeBookTestCase(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED , response.status_code)
 
 
+class SearchBookTestCases(APITestCase):
+    def setUp(self) :
+        self.random_username = generate_username()[0]
+        data = {
+            "username": self.random_username,
+            "password": "SomeStrongPassword",
+            "email": self.random_username + '@me.com',
+            "first_name": "HisName",
+            "last_name": "HisLastName",
+            "phone_number": "09126687452",
+            "address": "This is the test so computer doesnt have any address or location",
+            "postal_code": "1545685215"
+
+        }
+        self.registeration = self.client.post("/api/User/sign-up/", data)
+        self.client = APIClient()
+        log_data = {
+            "username" : self.random_username,
+            "password" : "SomeStrongPassword"
+        }
+        self.log = self.client.post("/api/User/token/" , log_data)
+        self.Token = self.log.data["access"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
+        self.Book = self.client.post("/api/Books/CreateBook/", {})
 
 
+        self.ID_of_book = self.Book.data["id"]
+        self.Book_title = self.Book.data["Title"]
+        self.Book_Description = self.Book.data["Description"]
+        self.Book_Category = self.Book.data["Categories"]
+        self.Book_publish_date = self.Book.data['Publish_date']
+    def test_SimpleSearch(self):
+        response = self.client.get('/api/Books/SearchBookView/?q={}'.format(self.ID_of_book))
+        self.assertEqual(status.HTTP_200_OK , response.status_code)
 
 
 
