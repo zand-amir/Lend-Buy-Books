@@ -190,6 +190,26 @@ class SearchBookTestCases(APITestCase):
             self.Book_publish_date))
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
+    def test_rateBookView_notrated(self):
+
+        response = self.client.get("/api/Books/Books-Rate-View/{}/"
+                                   .format(self.ID_of_book) )
+        data_not_rated ={'detail': 'No user rated yet'}
+
+        self.assertEqual(response.data , data_not_rated)
+    def test_rate_bookView_rated(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        data_to_rate = {
+            "BookID": self.ID_of_book,
+            "rate": random.randint(1, 20)
+
+        }
+        rate = self.client.post("/api/User/RateBook/", data=data_to_rate)
+        response = self.client.get("/api/Books/Books-Rate-View/{}/"
+                                   .format(self.ID_of_book))
+        self.assertEqual(response.status_code,status.HTTP_200_OK)
+
+
 
 
 
