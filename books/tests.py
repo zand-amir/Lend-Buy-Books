@@ -209,6 +209,49 @@ class SearchBookTestCases(APITestCase):
                                    .format(self.ID_of_book))
         self.assertEqual(response.status_code,status.HTTP_200_OK)
 
+class OfferBooksTestCases(APITestCase):
+
+    def setUp(self) :
+        self.random_username = generate_username()[0]
+        data = {
+            "username": self.random_username,
+            "password": "SomeStrongPassword",
+            "email": self.random_username + '@me.com',
+            "first_name": "HisName",
+            "last_name": "HisLastName",
+            "phone_number": "09126687452",
+            "address": "This is the test so computer doesnt have any address or location",
+            "postal_code": "1545685215"
+
+        }
+        self.registeration = self.client.post("/api/User/sign-up/", data)
+        self.client = APIClient()
+        log_data = {
+            "username" : self.random_username,
+            "password" : "SomeStrongPassword"
+        }
+        self.log = self.client.post("/api/User/token/" , log_data)
+        self.Token = self.log.data["access"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
+        self.Book = self.client.post("/api/Books/CreateBook/", {})
+
+
+        self.ID_of_book = self.Book.data["id"]
+
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        data_to_propose = {
+            "Offered_price": random.randint(1000, 10000),
+            "Descriptions": "Test Description for certain offer :)",
+            "books": [self.ID_of_book]
+        }
+        self.propose = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+
+
+
+    def test_ViewOffers(self):
+        offers = self.client.get("/api/Books/BooksProposedView/{}/".format(self.ID_of_book))
+        self.assertEqual(status.HTTP_200_OK,offers.status_code)
+
 
 
 
