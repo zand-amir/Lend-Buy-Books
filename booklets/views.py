@@ -154,7 +154,7 @@ class Booklets_Advance_Search(ModelViewSet):
     Our_fields = ('id',
                   'Title',
                   'Category',
-                  'Description'
+                  'Description',
                   'Course_name',
                   'University_name',
                   'Professor_name',
