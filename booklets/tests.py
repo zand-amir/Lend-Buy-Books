@@ -58,5 +58,17 @@ class CreationBookletsTestCase(APITestCase):
         self.assertEqual(response.status_code , status.HTTP_201_CREATED)
 
 
+    def test_CreateBooklets_UNAUTHORIZED(self):
 
+        data_for_booklets = {
+            "Title" : "Test Booklet Name" ,
+            "Category" : "بدون دسته بندی" ,
+            "Professor_name" : "Test Name",
+            "Description" : "Test Descriptions" ,
+            "Course_name" : "Test course" ,
+            "University_name" : "Test UNI Name" ,
+            "Semester" : "Test Semester"
+        }
+        response = self.client.post("/api/Booklets/CreateBooklet/" , data_for_booklets)
+        self.assertEqual(response.status_code , status.HTTP_401_UNAUTHORIZED)
 
