@@ -72,3 +72,44 @@ class CreationBookletsTestCase(APITestCase):
         response = self.client.post("/api/Booklets/CreateBooklet/" , data_for_booklets)
         self.assertEqual(response.status_code , status.HTTP_401_UNAUTHORIZED)
 
+
+class BookletsTestCase(APITestCase):
+    def setUp(self) :
+        self.random_username = generate_username()[0]
+        data = {
+            "username": self.random_username,
+            "password": "SomeStrongPassword",
+            "email": self.random_username + '@me.com',
+            "first_name": "HisName",
+            "last_name": "HisLastName",
+            "phone_number": "09126687452",
+            "address": "This is the test so computer doesnt have any address or location",
+            "postal_code": "1545685215"
+
+        }
+        self.registeration = self.client.post("/api/User/sign-up/", data)
+        self.client = APIClient()
+        log_data = {
+            "username" : self.random_username,
+            "password" : "SomeStrongPassword"
+        }
+        self.log = self.client.post("/api/User/token/" , log_data)
+        self.Token = self.log.data["access"]
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        data_for_booklets = {
+            "Title": "Test Booklet Name",
+            "Category": "بدون دسته بندی",
+            "Professor_name": "Test Name",
+            "Description": "Test Descriptions",
+            "Course_name": "Test course",
+            "University_name": "Test UNI Name",
+            "Semester": "Test Semester"
+        }
+        self.Booklet = self.client.post("/api/Booklets/CreateBooklet/", data_for_booklets)
+
+
+    def test_Viewlets(self):
+
+        response = self.client.get("/api/Booklets/Book-let-list/")
+        print(response.status_code , status.HTTP_200_OK)
+
