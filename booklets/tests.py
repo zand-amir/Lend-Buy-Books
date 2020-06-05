@@ -111,5 +111,13 @@ class BookletsTestCase(APITestCase):
     def test_Viewlets(self):
 
         response = self.client.get("/api/Booklets/Book-let-list/")
-        print(response.status_code , status.HTTP_200_OK)
+        self.assertEqual(response.status_code , status.HTTP_200_OK)
+
+    def test_Booklets(self):
+
+        requestToGetID = self.client.get("/api/Booklets/BookLetsView/")
+        BookletID = requestToGetID.data[0].get('id')
+        response = self.client.get("/api/Booklets/BookLetsView/?q={}".format(BookletID))
+        self.assertEqual(response.status_code , status.HTTP_200_OK)
+
 
