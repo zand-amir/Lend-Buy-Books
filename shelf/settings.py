@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'cart',
     'comment.apps.CommentConfig',
     'booklets',
+    'chat'
 ]
 
 
