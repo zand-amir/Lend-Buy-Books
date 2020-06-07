@@ -29,6 +29,7 @@ urlpatterns = [
     path(r'api/Booklets/', include("booklets.urls")),
     path('comments/',include("comment.urls")),
     path(r'api/Actions/', include("cart.urls")) ,
+    path('chat/',include('chat.urls' , namespace='chat'))
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
