@@ -375,7 +375,7 @@ class StartBorrowAPI(APIView):
             try:
                 bor = Borrow_book.objects.get(id=Intended_Offer_ID)
                 (bor.StartBorrowingTime,bor.EndBorrowingTime) = (timezone.now(),timezone.now() + timezone.timedelta(days=7))
-            
+                 bor.save()
                 content = {
                     'detail': 'successfuly Started the Borrow book action'}
                 return Response(content, status=status.HTTP_201_CREATED)
