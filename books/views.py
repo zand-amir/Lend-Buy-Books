@@ -143,15 +143,14 @@ class BuyAPI(APIView):
             Offer = Proposed_Book.objects.get(id=serializer.data['OfferID'])
             a = Offer.Offered_price
             b = Buyer.credit
-            print(a+5)
-            print(b+3)
-
             if Buyer.credit < Offer.Offered_price:
                 content = {
                     'detail':'User does not have the requested credit!'}
                 return Response(content, status=status.HTTP_200_OK)
             Buyer.credit -= Offer.Offered_price
+            Seller.credit += Offer.Offered_price
             Buyer.save()
+            Seller.save()
             print(str(Offer) + 'has been completed.')
             Offer.delete()
             content = {
