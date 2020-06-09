@@ -26,3 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
 class CreditSerializer(serializers.Serializer):
     Amount = serializers.IntegerField()
 
+class MessageSerializer(serializers.Serializer):
+    Text = serializers.CharField(max_length = 100)
+
