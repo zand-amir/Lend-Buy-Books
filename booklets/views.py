@@ -18,7 +18,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from .api.serializers import (
-    BookletSeroalizer,
+    BookletSerializer,
     Booklet_all_serializer,
     ViewBookletsSerializer
 )
@@ -58,7 +58,7 @@ def pageGrab(pdFile):
 
 class BookletCreationAPI(APIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = BookletSeroalizer
+    serializer_class = BookletSerializer
 
     # parser_classes = (FileUploadParser,MultiPartParser , FormParser)
     def post(self, request, format=None):
