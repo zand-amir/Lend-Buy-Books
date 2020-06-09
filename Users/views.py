@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from .models import user
-from Users.api.serializers import UserInformationSerializer, CreditSerializer
+from Users.api.serializers import UserInformationSerializer, CreditSerializer, MessageSerializer
 
 
 # Create your views here.
