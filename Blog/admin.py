@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import BComment, BPost
 
-# Register your models here.
+admin.site.register(BComment)
+admin.site.register(BPost)
