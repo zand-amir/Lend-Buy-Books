@@ -58,7 +58,7 @@ class BCommentSubmit(APIView):
             Text = serializer.data['Text']
             Date = timezone.now()
             bcom = BComment(Author=Author,Date=Date,Title=Title,Text=Text,Likes=0)
-            pcom.save()
+            bcom.save()
 
             bpost.Comments.add(bcom)
 

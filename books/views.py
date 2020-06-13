@@ -139,8 +139,15 @@ class BuyAPI(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             Buyer = user.objects.get(username=request.user)
+            if not(Proposed_Book.objects.filter(id=serializer.data['OfferID'])):
+                content = {'detail': 'Offer not available'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
             Offer = Proposed_Book.objects.get(id=serializer.data['OfferID'])
+            Seller = Offer.Owner
             a = Offer.Offered_price
             b = Buyer.credit
             if Buyer.credit < Offer.Offered_price:
