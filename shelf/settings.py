@@ -109,6 +109,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tdaweooa',
+#         'USER' : 'tdaweooa',
+#         'PASSWORD' : 'tvwqdiY_skcK5fr5nzp8eSXwr9vRtEoY',
+#         'HOST' : 'ruby.db.elephantsql.com',
+#         'POST' : '5432'
+#     }
+# }
+
 CORS_ORIGIN_WHITELIST = (
 
     'http://localhost:3000',
