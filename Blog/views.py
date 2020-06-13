@@ -98,7 +98,7 @@ class BPostRetrieve(APIView):
         if bpost.PostImage:
             content['PostImage'] = bpost.PostImage
         for com in bpost.Comments.all():
-            comdict = {'Author':com.Author, 'Title':com.Title, 'Date':com.Date, 'Text':com.Text, 'Likes':com.Likes}
+            comdict = {'id':com.id, 'Author':com.Author.username, 'Title':com.Title, 'Date':com.Date, 'Text':com.Text, 'Likes':com.Likes}
             content['Comments'].append(comdict)
 
         return Response(content, status=status.HTTP_200_OK)
