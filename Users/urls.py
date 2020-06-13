@@ -4,7 +4,7 @@ from django.conf.urls import  url
 from django.urls import re_path
 from django.urls import path
 from rest_framework.authtoken import views
-from Users.views import SignupAPI, UserProfile, AddCreditAPI
+from Users.views import SignupAPI, UserProfile, AddCreditAPI, SendMessageAPI, getConversationAPI
 
 from django.conf.urls.static import static
 
@@ -25,6 +25,9 @@ urlpatterns = [
     url(r'RateBook/',RateBookAPIView.as_view() , name= 'bookRate'),
     url(r'AddCredit/',AddCreditAPI.as_view() , name= 'creditIncreament'),
     url(r'Profile/(?P<user>.+)/$',UserProfile.as_view() , name= 'OthersProfile'),
-    url(r'Profile/',UserProfile.as_view() , name= 'OwnProfile')
+    url(r'Profile/',UserProfile.as_view() , name= 'OwnProfile'),
+    url(r'SendMessage/(?P<recipient>.+)/$',SendMessageAPI.as_view() , name= 'SendMessage'),
+    url(r'getConversation/(?P<recipient>.+)/$',getConversationAPI.as_view() , name= 'getConversation')
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

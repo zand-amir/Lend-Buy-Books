@@ -18,7 +18,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from .api.serializers import (
-    BookletSeroalizer,
+    BookletSerializer,
     Booklet_all_serializer,
     ViewBookletsSerializer
 )
@@ -58,7 +58,7 @@ def pageGrab(pdFile):
 
 class BookletCreationAPI(APIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = BookletSeroalizer
+    serializer_class = BookletSerializer
 
     # parser_classes = (FileUploadParser,MultiPartParser , FormParser)
     def post(self, request, format=None):
@@ -79,14 +79,14 @@ class BookletCreationAPI(APIView):
                                    Course_name=Course_name,Professor_name = Professor_name,
                                    University_name=University_name, Semester=Semester)
 
-                if ('BookletIMG' in request.data):
-                    booklet.BookletIMG = request.data['BookletIMG']
+                if ('Image' in request.FILES):
+                    booklet.BookletIMG = File(request.FILES['Image'])
 
-                if 'PDF_FILE' in request.data:
-                    f = request.data['PDF_FILE']
-                    booklet.PDF_FILE = f
-                    booklet.PDF_Validate_File = File(pageGrab(f))
-
+                if ('PDF' in request.FILES):
+                    f = request.FILES['PDF']
+                    nf = pageGrab(f)
+                    booklet.PDF_Validate_File = File(nf)
+                    booklet.PDF_FILE = File(f)
                 booklet.save()
 
                 content = {
