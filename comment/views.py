@@ -44,6 +44,9 @@ class SubmitCommentAPI(APIView):
         serializer = self.serializer_class(data = request.data)
 
         if serializer.is_valid():
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             Author = user.objects.get(username=request.user)
             CT = serializer.data['Comment_text']
             AB = Books.objects.get(id=serializer.data['BookID'])

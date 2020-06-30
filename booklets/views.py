@@ -64,6 +64,9 @@ class BookletCreationAPI(APIView):
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             Owner = user.objects.get(username=request.user)
             Title = serializer.data.get("Title")
             Category = serializer.data.get("Category")
@@ -94,7 +97,7 @@ class BookletCreationAPI(APIView):
                 return Response(content, status=status.HTTP_201_CREATED)
             except:
 
-                content = {'detail': 'Failed to create booklet '}
+                content = {'detail': 'Failed to process the files!'}
 
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
         else:

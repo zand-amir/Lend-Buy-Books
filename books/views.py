@@ -97,7 +97,9 @@ class Proposed_bookCreationAPI(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             creator = user.objects.get(username=request.user.username)
             Offered_price = serializer.data['Offered_price']
             Descriptions = serializer.data['Descriptions']
@@ -108,6 +110,9 @@ class Proposed_bookCreationAPI(APIView):
                 proposed = Proposed_Book(Owner=creator, Offered_price=Offered_price, Descriptions=Descriptions)
                 proposed.save()
                 for b in books:
+                    if not(Books.objects.filter(id=b)):
+                        content = {'detail': 'Invalid Book!'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
                     book = Books.objects.get(id=b)
                     proposed.Proposed_book.add(book)
                     if Wishlist.objects.filter(WishedBook=b).exists():
@@ -139,8 +144,15 @@ class BuyAPI(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             Buyer = user.objects.get(username=request.user)
+            if not(Proposed_Book.objects.filter(id=serializer.data['OfferID'])):
+                content = {'detail': 'Offer not available'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
             Offer = Proposed_Book.objects.get(id=serializer.data['OfferID'])
+            Seller = Offer.Owner
             a = Offer.Offered_price
             b = Buyer.credit
             if Buyer.credit < Offer.Offered_price:
@@ -332,7 +344,9 @@ class Borrow_bookCreationAPI(APIView):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
-
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             creator = user.objects.get(username=request.user)
             Descriptions = serializer.data['Descriptions']
             books = serializer.data['books']
@@ -342,6 +356,9 @@ class Borrow_bookCreationAPI(APIView):
                 bor = Borrow_book(Owner=creator, Descriptions=Descriptions)
                 bor.save()
                 for b in books:
+                    if not(Books.objects.filter(id=b)):
+                        content = {'detail': 'Invalid Book!'}
+                        return Response(content, status=status.HTTP_400_BAD_REQUEST)
                     book = Books.objects.get(id=b)
                     bor.Offered_to_borrow.add(book)
 
@@ -373,6 +390,9 @@ class StartBorrowAPI(APIView):
             Intended_Offer_ID = serializer.data['BorrowOfferID']
 
             try:
+                if not(Borrow_book.objects.filter(id=Intended_Offer_ID)):
+                    content = {'detail': 'Offer not available!'}
+                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
                 bor = Borrow_book.objects.get(id=Intended_Offer_ID)
                 (bor.StartBorrowingTime,bor.EndBorrowingTime) = (timezone.now(),timezone.now() + timezone.timedelta(days=7))
                 bor.save()

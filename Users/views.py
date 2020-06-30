@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.forms.models import model_to_dict
+from django.utils import timezone
 
 from rest_framework.permissions import (
     AllowAny,
@@ -9,8 +10,8 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .models import user
-from Users.api.serializers import UserInformationSerializer, CreditSerializer
+from .models import user, Message, Conversation
+from Users.api.serializers import UserInformationSerializer, CreditSerializer, MessageSerializer
 
 
 # Create your views here.
@@ -104,3 +105,79 @@ class UserProfile(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class SendMessageAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = MessageSerializer
+
+    def post(self,request,format=None,*args,**kwargs):
+        serializer = self.serializer_class(data=request.data, partial=True)
+
+        if serializer.is_valid():
+            p1 = user.objects.get(username=request.user)
+            p2 = user.objects.get(id=self.kwargs['recipient'])
+
+            text = serializer.data['Text']
+            message = Message(Text=text,Date=timezone.now())
+            message.save()
+            l = Conversation.objects.filter(Participant1 = p1)
+            if l:
+                c = l.filter(Participant2 = p2)
+                if c:
+                    conversation = c[0]
+                else:
+                    conversation = Conversation(Participant1 = p1, Participant2 = p2)
+                    conversation.save()
+            else:
+                l = Conversation.objects.filter(Participant1 = p2)
+                if l:
+                    c = l.filter(Participant2 = p1)
+                    if c:
+                        conversation = c[0]
+                    else:
+                        conversation = Conversation(Participant1 = p2, Participant2 = p1)
+                        conversation.save()
+                else:
+                    conversation = Conversation(Participant1 = p1, Participant2 = p2)
+                    conversation.save()
+
+            conversation.Log.add(message)
+            content = {'detail':'Success!'}
+            return Response(content, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+                
+                
+class getConversationAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self,request,format=None,*args,**kwargs):
+        p1 = user.objects.get(username=request.user)
+        p2 = user.objects.get(id=self.kwargs['recipient'])
+
+        l = Conversation.objects.filter(Participant1 = p1)
+        if l:
+            c = l.filter(Participant2 = p2)
+            if c:
+                conversation = c[0]
+            else:
+                conversation = 'N/A'
+        else:
+            l = Conversation.objects.filter(Participant1 = p2)
+            if l:
+                c = l.filter(Participant2 = p1)
+                if c:
+                    conversation = c[0]
+                else:
+                    conversation = 'N/A'
+            else:
+                conversation = 'N/A'
+
+        if conversation == 'N/A':
+            content = {'detail':'No messages yet!'}
+            return Response(content, status=status.HTTP_200_OK)
+        content = {'Messages':[]}
+        for message in conversation.Log.all():
+            m = {'text':message.Text,'date':message.Date}
+            content['Messages'].append(m)
+        return Response(content, status=status.HTTP_200_OK)
