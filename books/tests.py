@@ -189,13 +189,14 @@ class ProposeBookTestCase(APITestCase):
 
     def test_ProposeBookNotinDB(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
-        book = self.ID_of_book + random.randint(1000,1000000)
+        book =  random.randint(100,120)
+
         data_to_propose = {
             "Offered_price": random.randint(1000, 10000),
             "Descriptions": "Test Description for certain offer :)",
-            "books": [book]
+            "books": [book,]
         }
-        response = self.client.post("/api/Books/Proposals/Create/", data=data_to_propose)
+        response = self.client.post("/api/Books/Proposals/create/", data=data_to_propose)
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
 
     def test_multiproposeBook(self):
