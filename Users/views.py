@@ -116,7 +116,13 @@ class SendMessageAPI(APIView):
         serializer = self.serializer_class(data=request.data, partial=True)
 
         if serializer.is_valid():
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             p1 = user.objects.get(username=request.user)
+            if not(user.objects.filter(id=self.kwargs['recipient'])):
+                content = {'detail': 'Invalid Recipiant ID!'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
             p2 = user.objects.get(id=self.kwargs['recipient'])
 
             text = serializer.data['Text']
@@ -155,9 +161,15 @@ class getConversationAPI(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self,request,format=None,*args,**kwargs):
+        if not(user.objects.filter(username=request.user)):
+            content = {'detail': 'Invalid User!'}
+            return Response(content, status=status.HTTP_401_UNAUTHORIZED)
         p1 = user.objects.get(username=request.user)
+        if not(user.objects.filter(id=self.kwargs['recipient'])):
+            content = {'detail': 'Invalid Recipiant ID!'}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
         p2 = user.objects.get(id=self.kwargs['recipient'])
-
+            
         l = Conversation.objects.filter(Participant1 = p1)
         if l:
             c = l.filter(Participant2 = p2)
