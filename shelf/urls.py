@@ -21,6 +21,9 @@ from django.urls import include
 
 from django.conf import settings
 from django.conf.urls.static import static , serve
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title="my swagger view")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +33,7 @@ urlpatterns = [
     path('comments/',include("comment.urls")),
     path(r'api/Actions/', include("cart.urls")) ,
     path(r'api/Blog/', include("Blog.urls")) ,
+    path('',schema_view)
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
