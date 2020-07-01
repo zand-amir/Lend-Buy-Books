@@ -64,11 +64,14 @@ class AddCreditAPI(APIView):
         serializer = self.serializer_class(data=request.data)
         
         if serializer.is_valid():
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             usr = user.objects.get(username = self.request.user)
             usr.credit += serializer.data['Amount']
             usr.save()
             content = {'detail': 'success'}
-            return Response(content, status=status.HTTP_201_CREATED)
+            return Response(content, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
