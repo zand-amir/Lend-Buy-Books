@@ -62,6 +62,60 @@ class CreationBookTestCase(APITestCase):
         }
         response = self.client.post("/api/Books/CreateBook/",data=data)
         self.assertEqual(status.HTTP_201_CREATED , response.status_code)
+    def test_bookCreationHaveimg(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        # image = Image.new('RGB' , (100,100))
+        # temp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
+        # image.save(temp_file)
+        # temp_file.seek(0)
+        data = {
+            "Title": "TestTitle",
+            "Description": "TestDescription",
+            "Categories": "بدون دسته بندی",
+            "Publish_date": "TestDate",
+            "publish_series": "TestSeries",
+            "Author": "TestAuthor",
+            "Price": "TestPrice",
+            "ISBN": "TestISBN",
+            "Publisher": "TestPub",
+            # "BookIMG": temp_file
+        }
+        response = self.client.post("/api/Books/CreateBook/", data=data)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+
+    def test_creationBookInvalidTitleLength(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        data = {
+            "Title": 100*"TestTitle",
+            "Description": "TestDescription",
+            "Categories": "بدون دسته بندی",
+            "Publish_date": "TestDate",
+            "publish_series": "TestSeries",
+            "Author": "TestAuthor",
+            "Price": "TestPrice",
+            "ISBN": "TestISBN",
+            "Publisher": "TestPub",
+        }
+        response = self.client.post("/api/Books/CreateBook/", data= data)
+        self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
+
+    def test_creationBookInvalidcategory(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        data = {
+            "Title": "TestTitle",
+            "Description": "TestDescription",
+            "Categories": "Not in category",
+            "Publish_date": "TestDate",
+            "publish_series": "TestSeries",
+            "Author": "TestAuthor",
+            "Price": "TestPrice",
+            "ISBN": "TestISBN",
+            "Publisher": "TestPub",
+        }
+        response = self.client.post("/api/Books/CreateBook/", data=data)
+        self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
+
+
     def test_UnAuthorizedUserCreateBook(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+ "")
         # image = Image.new('RGB' , (100,100))
@@ -114,8 +168,10 @@ class ProposeBookTestCase(APITestCase):
         self.Token = self.log.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
         self.Book = self.client.post("/api/Books/CreateBook/", {})
+        self.Book2 = self.client.post("/api/Books/CreateBook/", {})
 
         self.ID_of_book = self.Book.data["id"]
+        self.ID_of_book2 = self.Book2.data["id"]
 
 
 
@@ -131,6 +187,40 @@ class ProposeBookTestCase(APITestCase):
         response = self.client.post("/api/Books/Book-propose/" , data=data_to_propose)
         self.assertEqual(status.HTTP_201_CREATED,response.status_code)
 
+    def test_ProposeBookNotinDB(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+        book = self.ID_of_book + random.randint(1000,1000000)
+        data_to_propose = {
+            "Offered_price": random.randint(1000, 10000),
+            "Descriptions": "Test Description for certain offer :)",
+            "books": [book]
+        }
+        response = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
+
+    def test_multiproposeBook(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
+
+        data_to_propose = {
+            "Offered_price": random.randint(1000, 10000),
+            "Descriptions": "Test Description for 2 books :)",
+            "books": [self.ID_of_book , self.ID_of_book2]
+        }
+        response = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        self.assertEqual(response.status_code , status.HTTP_201_CREATED)
+
+
+    def test_proposeBookUNAUTHORIZED(self):
+        self.client.force_authenticate(user=None)
+        data_to_propose = {
+            "Offered_price": random.randint(1000, 10000),
+            "Descriptions": "Test Description for certain offer :)",
+            "books": [self.ID_of_book]
+        }
+
+        response = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        self.assertEqual(response.status_code , status.HTTP_401_UNAUTHORIZED)
+
     def test_RateBook(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
         data_to_rate = {
@@ -140,6 +230,8 @@ class ProposeBookTestCase(APITestCase):
         }
         response = self.client.post("/api/User/RateBook/", data=data_to_rate)
         self.assertEqual(status.HTTP_201_CREATED , response.status_code)
+
+
 
 
 class SearchBookTestCases(APITestCase):
@@ -208,6 +300,11 @@ class SearchBookTestCases(APITestCase):
         response = self.client.get("/api/Books/Books-Rate-View/{}/"
                                    .format(self.ID_of_book))
         self.assertEqual(response.status_code,status.HTTP_200_OK)
+    def test_rateBookUNAUTH(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.get("/api/Books/Books-Rate-View/{}/"
+                                   .format(self.ID_of_book))
+        self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)
 
 class OfferBooksTestCases(APITestCase):
 
