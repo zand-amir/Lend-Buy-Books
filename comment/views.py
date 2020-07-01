@@ -23,15 +23,13 @@ class CommentViewAPI(APIView):
         serializer = self.serializer_class(data = request.data)
 
         if serializer.is_valid():
-            try:
-                Intended_Book = Books.objects.get(id = serializer.data['BookID'])
-                comlist = [{'auth':com.Comment_Author.username ,'text':com.Comment_Text}for com in Comment.objects.filter(Addressed_Book = Intended_Book)]
-                content = {'detail':'Success','Comments':comlist}
-                #print('comlist :'+str(comlist))
-                return Response(content, status=status.HTTP_201_CREATED)
-            except:
-                content = {'detail': 'Failure'}
+            if not(Books.objects.filter(id = serializer.data['BookID'])):
+                content = {'detail': 'Invalid Book ID'}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            Intended_Book = Books.objects.get(id = serializer.data['BookID'])
+            comlist = [{'auth':com.Comment_Author.username ,'text':com.Comment_Text}for com in Comment.objects.filter(Addressed_Book = Intended_Book)]
+            content = {'detail':'Success','Comments':comlist}
+            return Response(content, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         
@@ -42,13 +40,16 @@ class SubmitCommentAPI(APIView):
 
     def post(self, request, format = None):
         serializer = self.serializer_class(data = request.data)
-
+        
         if serializer.is_valid():
             if not(user.objects.filter(username=request.user)):
                 content = {'detail': 'Invalid User!'}
                 return Response(content, status=status.HTTP_401_UNAUTHORIZED)
             Author = user.objects.get(username=request.user)
             CT = serializer.data['Comment_text']
+            if not(Books.objects.filter(id=serializer.data['BookID'])):
+                content = {'detail': 'Invalid Book ID!'}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
             AB = Books.objects.get(id=serializer.data['BookID'])
             try:
                 CommentInstance = Comment(Addressed_Book = AB, Comment_Author = Author, Comment_Text = CT)
