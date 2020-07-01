@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/User/', include('Users.urls')),
     path(r'api/Books/', include("books.urls")),
     path(r'api/Booklets/', include("booklets.urls")),
-    path('comments/',include("comment.urls")),
+    path('api/comments/',include("comment.urls")),
     path(r'api/Actions/', include("cart.urls")) ,
     path(r'api/Blog/', include("Blog.urls")) ,
     path('',schema_view)
