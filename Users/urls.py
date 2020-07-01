@@ -19,15 +19,22 @@ from django.contrib.auth.views import LogoutView
 
 
 urlpatterns = [
-    url(r'^sign-up/$', SignupAPI.as_view(), name='register'),
-    url(r'^token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    url(r'^token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
-    url(r'RateBook/',RateBookAPIView.as_view() , name= 'bookRate'),
-    url(r'AddCredit/',AddCreditAPI.as_view() , name= 'creditIncreament'),
-    url(r'Profile/(?P<user>.+)/$',UserProfile.as_view() , name= 'OthersProfile'),
-    url(r'Profile/',UserProfile.as_view() , name= 'OwnProfile'),
-    url(r'SendMessage/(?P<recipient>.+)/$',SendMessageAPI.as_view() , name= 'SendMessage'),
-    url(r'getConversation/(?P<recipient>.+)/$',getConversationAPI.as_view() , name= 'getConversation')
+      url(r'^sign-up/$', SignupAPI.as_view(), name='register'),
+      url(r'^token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+      url(r'^token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
+      url(r'Book/Rate/', RateBookAPIView.as_view(), name='bookRate'),
+      url(r'Credit/Add/', AddCreditAPI.as_view(), name='creditIncreament'),
+      url(r'Profile/(?P<user>.+)/$', UserProfile.as_view(), name='OthersProfile'),
+      url(r'Profile/My-Profile/', UserProfile.as_view(), name='OwnProfile'),
+    # url(r'^sign-up/$', SignupAPI.as_view(), name='register'),
+    # url(r'^token/$', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # url(r'^token/refresh/$', TokenRefreshView.as_view(), name='token_refresh'),
+    # url(r'RateBook/',RateBookAPIView.as_view() , name= 'bookRate'),
+    # url(r'AddCredit/',AddCreditAPI.as_view() , name= 'creditIncreament'),
+    # url(r'Profile/(?P<user>.+)/$',UserProfile.as_view() , name= 'OthersProfile'),
+    # url(r'Profile/',UserProfile.as_view() , name= 'OwnProfile'),
+    url(r'PM/Chat/Send/(?P<recipient>.+)/$',SendMessageAPI.as_view() , name= 'SendMessage'),
+    url(r'PM/Chat/Log/(?P<recipient>.+)/$',getConversationAPI.as_view() , name= 'getConversation')
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
