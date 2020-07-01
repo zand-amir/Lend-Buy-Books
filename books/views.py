@@ -389,19 +389,21 @@ class StartBorrowAPI(APIView):
 
             Intended_Offer_ID = serializer.data['BorrowOfferID']
 
-            try:
-                if not(Borrow_book.objects.filter(id=Intended_Offer_ID)):
-                    content = {'detail': 'Offer not available!'}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-                bor = Borrow_book.objects.get(id=Intended_Offer_ID)
-                (bor.StartBorrowingTime,bor.EndBorrowingTime) = (timezone.now(),timezone.now() + timezone.timedelta(days=7))
-                bor.save()
-                content = {
-                    'detail': 'successfuly Started the Borrow book action'}
-                return Response(content, status=status.HTTP_201_CREATED)
-            except:
-                content = {'detail': 'Failed to Start the Borrow book action'}
+            if not(user.objects.filter(username=request.user)):
+                content = {'detail': 'Invalid User!'}
+                return Response(content, status=status.HTTP_401_UNAUTHORIZED)
+            borrower = user.objects.get(username=request.user)
+            #Idk what to do with the borrower for now
+            
+            if not(Borrow_book.objects.filter(id=Intended_Offer_ID)):
+                content = {'detail': 'Offer not available!'}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
+            bor = Borrow_book.objects.get(id=Intended_Offer_ID)
+            (bor.StartBorrowingTime,bor.EndBorrowingTime) = (timezone.now(),timezone.now() + timezone.timedelta(days=7))
+            bor.save()
+            content = {
+                'detail': 'successfuly Started the Borrow book action'}
+            return Response(content, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
