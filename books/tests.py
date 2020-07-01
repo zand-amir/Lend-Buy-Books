@@ -60,7 +60,7 @@ class CreationBookTestCase(APITestCase):
             "Publisher": "TestPub",
             #"BookIMG": temp_file
         }
-        response = self.client.post("/api/Books/CreateBook/",data=data)
+        response = self.client.post("/api/Books/Create/",data=data)
         self.assertEqual(status.HTTP_201_CREATED , response.status_code)
     def test_bookCreationHaveimg(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
@@ -80,7 +80,7 @@ class CreationBookTestCase(APITestCase):
             "Publisher": "TestPub",
             # "BookIMG": temp_file
         }
-        response = self.client.post("/api/Books/CreateBook/", data=data)
+        response = self.client.post("/api/Books/Create/", data=data)
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
 
     def test_creationBookInvalidTitleLength(self):
@@ -96,7 +96,7 @@ class CreationBookTestCase(APITestCase):
             "ISBN": "TestISBN",
             "Publisher": "TestPub",
         }
-        response = self.client.post("/api/Books/CreateBook/", data= data)
+        response = self.client.post("/api/Books/Create/", data= data)
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
 
     def test_creationBookInvalidcategory(self):
@@ -112,7 +112,7 @@ class CreationBookTestCase(APITestCase):
             "ISBN": "TestISBN",
             "Publisher": "TestPub",
         }
-        response = self.client.post("/api/Books/CreateBook/", data=data)
+        response = self.client.post("/api/Books/Create/", data=data)
         self.assertEqual(response.status_code,status.HTTP_400_BAD_REQUEST)
 
 
@@ -134,13 +134,13 @@ class CreationBookTestCase(APITestCase):
             "Publisher": "TestPub",
             #"BookIMG": temp_file
         }
-        response = self.client.post("/api/Books/CreateBook/",data=data)
+        response = self.client.post("/api/Books/Create/",data=data)
         self.assertEqual(status.HTTP_401_UNAUTHORIZED , response.status_code)
 
     def test_ViewBookTestCase(self):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.Token)
-        creation = self.client.post("/api/Books/CreateBook/", {})
-        response = self.client.get("/api/Books/BookView/?q={}/".format(creation.data["id"]))
+        creation = self.client.post("/api/Books/Create/", {})
+        response = self.client.get("/api/Books/List/View/?q={}/".format(creation.data["id"]))
         self.assertEqual(status.HTTP_200_OK,response.status_code)
 
 
@@ -167,8 +167,8 @@ class ProposeBookTestCase(APITestCase):
         self.log = self.client.post("/api/User/token/" , log_data)
         self.Token = self.log.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
-        self.Book = self.client.post("/api/Books/CreateBook/", {})
-        self.Book2 = self.client.post("/api/Books/CreateBook/", {})
+        self.Book = self.client.post("/api/Books/Create/", {})
+        self.Book2 = self.client.post("/api/Books/Create/", {})
 
         self.ID_of_book = self.Book.data["id"]
         self.ID_of_book2 = self.Book2.data["id"]
@@ -184,7 +184,7 @@ class ProposeBookTestCase(APITestCase):
             "Descriptions" : "Test Description for certain offer :)",
             "books" : [self.ID_of_book]
         }
-        response = self.client.post("/api/Books/Book-propose/" , data=data_to_propose)
+        response = self.client.post("/api/Books/Proposals/Create/" , data=data_to_propose)
         self.assertEqual(status.HTTP_201_CREATED,response.status_code)
 
     def test_ProposeBookNotinDB(self):
@@ -195,7 +195,7 @@ class ProposeBookTestCase(APITestCase):
             "Descriptions": "Test Description for certain offer :)",
             "books": [book]
         }
-        response = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        response = self.client.post("/api/Books/Proposals/Create/", data=data_to_propose)
         self.assertEqual(response.status_code , status.HTTP_400_BAD_REQUEST)
 
     def test_multiproposeBook(self):
@@ -206,7 +206,7 @@ class ProposeBookTestCase(APITestCase):
             "Descriptions": "Test Description for 2 books :)",
             "books": [self.ID_of_book , self.ID_of_book2]
         }
-        response = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        response = self.client.post("/api/Books/Proposals/Create/", data=data_to_propose)
         self.assertEqual(response.status_code , status.HTTP_201_CREATED)
 
 
@@ -218,7 +218,7 @@ class ProposeBookTestCase(APITestCase):
             "books": [self.ID_of_book]
         }
 
-        response = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        response = self.client.post("/api/Books/Proposals/Create/", data=data_to_propose)
         self.assertEqual(response.status_code , status.HTTP_401_UNAUTHORIZED)
 
     def test_RateBook(self):
@@ -228,7 +228,7 @@ class ProposeBookTestCase(APITestCase):
             "rate" : random.randint(1,20)
 
         }
-        response = self.client.post("/api/User/RateBook/", data=data_to_rate)
+        response = self.client.post("/api/User/Book/Rate/", data=data_to_rate)
         self.assertEqual(status.HTTP_201_CREATED , response.status_code)
 
 
@@ -257,7 +257,7 @@ class SearchBookTestCases(APITestCase):
         self.log = self.client.post("/api/User/token/" , log_data)
         self.Token = self.log.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
-        self.Book = self.client.post("/api/Books/CreateBook/", {})
+        self.Book = self.client.post("/api/Books/Create/", {})
 
 
         self.ID_of_book = self.Book.data["id"]
@@ -266,11 +266,11 @@ class SearchBookTestCases(APITestCase):
         self.Book_Category = self.Book.data["Categories"]
         self.Book_publish_date = self.Book.data['Publish_date']
     def test_SimpleSearch(self):
-        response = self.client.get('/api/Books/SearchBookView/?q={}'.format(self.ID_of_book))
+        response = self.client.get('/api/Books/List/View/Search/?q={}'.format(self.ID_of_book))
         self.assertEqual(status.HTTP_200_OK , response.status_code)
 
     def test_AdvanceSearch(self):
-        response = self.client.get("/api/Books/BookAdvancedSearch/?id={}"
+        response = self.client.get("/api/Books/List/View/Advance-Search/?id={}"
                                    "&Title={}"
                                    "&Description={}"
                                    "&Categories={}"
@@ -284,7 +284,7 @@ class SearchBookTestCases(APITestCase):
 
     def test_rateBookView_notrated(self):
 
-        response = self.client.get("/api/Books/Books-Rate-View/{}/"
+        response = self.client.get("/api/Books/Rate/View/{}/"
                                    .format(self.ID_of_book) )
         data_not_rated ={'detail': 'No user rated yet'}
 
@@ -296,13 +296,13 @@ class SearchBookTestCases(APITestCase):
             "rate": random.randint(1, 20)
 
         }
-        rate = self.client.post("/api/User/RateBook/", data=data_to_rate)
-        response = self.client.get("/api/Books/Books-Rate-View/{}/"
+        rate = self.client.post("/api/User/Book/Rate/", data=data_to_rate)
+        response = self.client.get("/api/Books/Rate/View/{}/"
                                    .format(self.ID_of_book))
         self.assertEqual(response.status_code,status.HTTP_200_OK)
     def test_rateBookUNAUTH(self):
         self.client.force_authenticate(user=None)
-        response = self.client.get("/api/Books/Books-Rate-View/{}/"
+        response = self.client.get("/api/Books/Rate/View/{}/"
                                    .format(self.ID_of_book))
         self.assertEqual(response.status_code,status.HTTP_204_NO_CONTENT)
 
@@ -330,7 +330,7 @@ class OfferBooksTestCases(APITestCase):
         self.log = self.client.post("/api/User/token/" , log_data)
         self.Token = self.log.data["access"]
         self.client.credentials(HTTP_AUTHORIZATION='Bearer '+self.Token)
-        self.Book = self.client.post("/api/Books/CreateBook/", {})
+        self.Book = self.client.post("/api/Books/Create/", {})
 
 
         self.ID_of_book = self.Book.data["id"]
@@ -341,12 +341,12 @@ class OfferBooksTestCases(APITestCase):
             "Descriptions": "Test Description for certain offer :)",
             "books": [self.ID_of_book]
         }
-        self.propose = self.client.post("/api/Books/Book-propose/", data=data_to_propose)
+        self.propose = self.client.post("/api/Books/Proposals/Create/", data=data_to_propose)
 
 
 
     def test_ViewOffers(self):
-        offers = self.client.get("/api/Books/BooksProposedView/{}/".format(self.ID_of_book))
+        offers = self.client.get("/api/Books/Proposals/View/{}/".format(self.ID_of_book))
         self.assertEqual(status.HTTP_200_OK,offers.status_code)
 
 

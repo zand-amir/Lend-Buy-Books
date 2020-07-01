@@ -15,11 +15,17 @@ from .views import (BookletCreationAPI ,
                     )
 urlpatterns = [
 
-    url(r'CreateBooklet/', BookletCreationAPI.as_view() , name='Create_booklets'),
-    url(r'Book-let-list/' , BookletsView.as_view() , name='List_booklets') ,
-    url(r'BookLetsView/', ViewBookLetsAPI.as_view(), name='View'),
-    url(r'SearchBookLetsView/',Searching_Booklets_View.as_view(),name='SearchBooklets'),
-    url(r'BookLetsAdvancedSearch/',Booklets_Advance_Search.as_view({'get': 'list'}),name='booklet_advance_search'),
+    url(r'Create/', BookletCreationAPI.as_view() , name='Create_booklets'),
+    url(r'View/' , BookletsView.as_view() , name='List_booklets') ,
+    url(r'Lists/View/', ViewBookLetsAPI.as_view(), name='View'),
+    url(r'View/Search/',Searching_Booklets_View.as_view(),name='SearchBooklets'),
+    url(r'View/Advanced-Search/',Booklets_Advance_Search.as_view({'get': 'list'}),name='booklet_advance_search'),
+
+    # url(r'CreateBooklet/', BookletCreationAPI.as_view() , name='Create_booklets'),
+    # url(r'Book-let-list/' , BookletsView.as_view() , name='List_booklets') ,
+    # url(r'BookLetsView/', ViewBookLetsAPI.as_view(), name='View'),
+    # url(r'SearchBookLetsView/',Searching_Booklets_View.as_view(),name='SearchBooklets'),
+    # url(r'BookLetsAdvancedSearch/',Booklets_Advance_Search.as_view({'get': 'list'}),name='booklet_advance_search'),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

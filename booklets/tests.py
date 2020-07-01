@@ -54,7 +54,7 @@ class CreationBookletsTestCase(APITestCase):
             "University_name" : "Test UNI Name" ,
             "Semester" : "Test Semester"
         }
-        response = self.client.post("/api/Booklets/CreateBooklet/" , data_for_booklets)
+        response = self.client.post("/api/Booklets/Create/" , data_for_booklets)
         self.assertEqual(response.status_code , status.HTTP_201_CREATED)
 
 
@@ -69,7 +69,7 @@ class CreationBookletsTestCase(APITestCase):
             "University_name" : "Test UNI Name" ,
             "Semester" : "Test Semester"
         }
-        response = self.client.post("/api/Booklets/CreateBooklet/" , data_for_booklets)
+        response = self.client.post("/api/Booklets/Create/" , data_for_booklets)
         self.assertEqual(response.status_code , status.HTTP_401_UNAUTHORIZED)
 
 
@@ -105,33 +105,33 @@ class BookletsTestCase(APITestCase):
             "University_name": "Test UNI Name",
             "Semester": "Test Semester"
         }
-        self.Booklet = self.client.post("/api/Booklets/CreateBooklet/", data_for_booklets)
+        self.Booklet = self.client.post("/api/Booklets/Create/", data_for_booklets)
 
 
     def test_Viewlets(self):
 
-        response = self.client.get("/api/Booklets/Book-let-list/")
+        response = self.client.get("/api/Booklets/View/")
         self.assertEqual(response.status_code , status.HTTP_200_OK)
 
     def test_Booklets(self):
 
-        requestToGetID = self.client.get("/api/Booklets/BookLetsView/")
+        requestToGetID = self.client.get("/api/Booklets/View/")
         BookletID = requestToGetID.data[0].get('id')
-        response = self.client.get("/api/Booklets/BookLetsView/?q={}".format(BookletID))
+        response = self.client.get("/api/Booklets/Lists/View/?q={}".format(BookletID))
         self.assertEqual(response.status_code , status.HTTP_200_OK)
 
     def test_BookletsSearch(self):
 
-        requestToGetID = self.client.get("/api/Booklets/BookLetsView/")
+        requestToGetID = self.client.get("/api/Booklets/View/")
         BookletID = requestToGetID.data[0].get('id')
-        response = self.client.get("/api/Booklets/SearchBookLetsView/?q={}".format(BookletID))
+        response = self.client.get("/api/Booklets/View/Search/?q={}".format(BookletID))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_BookletsAdvanceSearch(self):
 
-        requestToGetID = self.client.get("/api/Booklets/BookLetsView/")
+        requestToGetID = self.client.get("/api/Booklets/View/")
         BookletID = requestToGetID.data[0].get('id')
-        response = self.client.get("/api/Booklets/BookLetsAdvancedSearch/?id={}"
+        response = self.client.get("/api/Booklets/View/Advanced-Search/?id={}"
                                    "&Title={}"
                                    "&Category={}"
                                    "&Professor_name={}"
