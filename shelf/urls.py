@@ -34,6 +34,8 @@ urlpatterns = [
     path(r'api/Actions/', include("cart.urls")) ,
     path(r'api/Blog/', include("Blog.urls")) ,
     path('',schema_view)
+    path('chat/',include('chat.urls' , namespace='chat'))
+
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
